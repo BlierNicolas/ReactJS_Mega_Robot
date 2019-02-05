@@ -76,7 +76,7 @@ class IndexPage extends Component {
 					</Jumbotron>
 
 					<Container fluid className="p-0">
-						<div className="pb-5">
+						<div className="pb-5"> 
 							<Row>
 								<Col lg="4" md="4" sm="6" xs="12">
 									<Card className="text-center">
