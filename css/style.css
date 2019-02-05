@@ -1,0 +1,279 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Roboto:300,400');
+@import url('https://use.fontawesome.com/releases/v5.0.13/css/all.css');
+body {
+    background-color: #ffffff;
+}
+
+#page-wrapper {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100vh;
+}
+
+.row {
+    margin: 0;
+}
+
+.around {
+    padding: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.navbar-top-links .dropdown-histoires,
+.navbar-top-links .dropdown-infos {
+    width: auto;
+    min-width: 0;
+}
+
+.navbar-top-links .dropdown-histoires,
+.navbar-top-links .dropdown-infos {
+    margin-left: 5px;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        z-index: 1;
+        position: absolute;
+        width: 250px;
+        margin-top: 51px;
+    }
+    .navbar-top-links .dropdown-histoires,
+    .navbar-top-links .dropdown-infos {
+        margin-left: auto;
+    }
+}
+
+.fff {
+    height: calc(100% - 20px);
+}
+
+.fff .card-body {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    height: 100%;
+}
+
+.fff .card-body .card-text {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.fff .card-body .card-text a {
+    align-self: flex-end;
+}
+
+.lecture-texte {
+    font-size: 1.2rem;
+    line-height: 1.9;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+}
+
+.temps_lecture {
+    font-style: italic;
+}
+
+.lecture-mode-background {
+    background-color: #343a40;
+}
+
+.lecture-mode-text-color {
+    color: lightgray;
+}
+
+.darkClass {
+    background-color: #343a40;
+    color: lightgray;
+}
+
+.darkClass .jumbotron {
+    background-color: #001c38;
+}
+
+.darkClass .list-group-item {
+    background-color: #343a40;
+    border-color: lightgray;
+}
+
+.darkClass .list-group-item-heading {
+    background-color: #343a40;
+}
+
+.darkClass .list-group-item-text {
+    background-color: #343a40;
+}
+
+.breadcrumb {
+    border-radius: 0
+}
+
+footer {
+    background-color: #343a40;
+    /* min-height: 100px; */
+    margin-top: auto;
+}
+
+.histoires-pills:hover {
+    cursor: pointer;
+}
+
+.reading-progress {
+    border-radius: 0;
+}
+
+.dropdown-item:active a:hover {
+    color: white;
+}
+
+.contentful-logo {
+    max-width: 100px;
+    width: 100%;
+}
+
+.display-copy {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+@media (max-width: 450px) {
+    .display-copy {
+        justify-content: center;
+        padding-top: 5px;
+    }
+}
+
+.image-display {
+    width: 258px;
+    height: 400px;
+}
+
+@media (max-width: 700px) {
+    .nav-center {
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .nav-center li div {
+        left: 0;
+        /* right: auto; */
+    }
+}
+
+.font-weight-300 {
+    font-weight: 300;
+}
+
+.cursor-update {
+    cursor: pointer;
+}
+
+.cursor-update .active:hover {
+    color: white !important;
+}
+
+.vertical-timeline-element-icon {
+    box-shadow: none !important;
+}
+
+.vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
+    visibility: visible;
+    animation: custom-animation 0.6s !important;
+}
+
+@keyframes custom-animation {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes custom-animation-bounce-in {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.d-content {
+    display: contents;
+}
+
+.anim-bounce-in {
+    animation: custom-animation-bounce-in 0.6s !important;
+}
+
+.breadcrumb {
+    margin-bottom: 0;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.no-padding div button {
+    width: 100%;
+}
+
+@media (max-width: 700px) {
+    .navbar-collapse ul li {
+        text-align: center;
+    }
+    .navbar-collapse ul li div button {
+        text-align: center;
+    }
+}
+
+@media (min-width: 1224px) {
+    .display-title {
+        font-size: 4.5rem;
+    }
+}
+
+@media (max-width: 1224px) {
+    .display-title {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .display-title {
+        font-size: 2.5rem;
+    }
+}

@@ -1,10 +1,11 @@
 {
-  "name": "mega-robot-project-en-reactjs",
+  "name": "mega-robot-projet-en-reactjs",
   "private": true,
-  "description": "Project Mega Robot en ReactJS",
+  "description": "Projet Mega Robot en ReactJS",
   "version": "0.1.0",
   "author": "Nicolas Blier",
   "dependencies": {
+    "bootstrap": "^4.2.1",
     "firebase": "^5.8.2",
     "gatsby": "^2.0.111",
     "gatsby-image": "^2.0.29",
@@ -16,7 +17,10 @@
     "gatsby-transformer-sharp": "^2.1.13",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
+    "react-cookie": "^3.0.8",
+    "react-cookies": "^0.1.0",
     "react-dom": "^16.7.0",
+    "react-fontawesome": "^1.6.1",
     "react-helmet": "^5.2.0",
     "reactstrap": "^7.1.0"
   },
