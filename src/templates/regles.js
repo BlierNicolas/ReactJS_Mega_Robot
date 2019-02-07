@@ -20,7 +20,7 @@ import lang_en from '../langues/lang_en.json';
 
 import Layout from '../components/layout'
 
-class IndexPage extends Component {
+class ReglesPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -93,13 +93,13 @@ class IndexPage extends Component {
 	}
 }
 
-IndexPage.propTypes = {
+ReglesPage.propTypes = {
 	data: PropTypes.object.isRequired
 }
 
-export default IndexPage
+export default ReglesPage
 
-export const pageQuery = graphql`query test {
+export const pageQuery = graphql`query test9 {
     site {
 		siteMetadata {
 		  	title
