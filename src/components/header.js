@@ -9,7 +9,6 @@ import {
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem,
     Button
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
