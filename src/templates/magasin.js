@@ -48,10 +48,6 @@ class MagasinPage extends Component {
 	}
 
 	render() {
-		const {
-			data
-		} = this.props
-
 		return (
 			<Layout>
 				<div id="page-wrapper">

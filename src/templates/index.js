@@ -48,10 +48,6 @@ class IndexPage extends Component {
 	}
 
 	render() {
-		const {
-			data
-		} = this.props
-
 		return (
 			<Layout>
 				<div id="page-wrapper">
@@ -73,15 +69,48 @@ class IndexPage extends Component {
 					<Container fluid className="p-0">
 						<div className="pb-5">
 							<Row>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
+								<Col lg="4" sm="6" xs="12" className="pb-2">
+									<Teaser titre="Règles" desc="Mega Robot est régie par plusieurs règles en ce qui attrait des combats." btn_url={this.lang.header_regles_url} />
 								</Col>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
-								</Col>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
-								</Col>
+								{
+									this.state.lecteur !== "vide" ?
+										(<React.Fragment>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Profil" desc="Pour voir votre profil et d'autres information à votre sujet." btn_url={this.lang.header_profil_url}/>
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Armurerie" desc="Voyez et gérez vos robots ici." btn_url={this.lang.header_armurerie_url}/>
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Magasin" desc="C'est ici que vous vous procurerez les nouveautés et les équipements bonus." btn_url={this.lang.header_magasin_url}/>
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Histoire" desc="Si vous voulez suivre les aventures de nos deux protagonistes, c'est ici." btn_url={this.lang.header_histoire_url}/>
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Tournois" desc="Pour accéder aux tournois c'est ici." btn_url={this.lang.header_tournois_url}/>
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Club" desc="Le club est là, vous avez sans doutes des quêtes à accomplir." btn_url={this.lang.header_club_url}/>
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+											</Col>
+										</React.Fragment>) :
+										(<React.Fragment>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Démo" desc="Une demo est disponible pour mieux comprendre le système de combat." btn_url={this.lang.header_demo_url} />
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Tournois" desc="Plusieurs tournois sont organisés pour voir qui possède la meilleure équipe." btn_url={this.lang.header_tournois_url} />
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Histoire" desc="Venez vivre l'histoire de nos deux protagonistes qui chercherons à monter sur les podiums de leur catégorie." btn_url={this.lang.header_histoire_url} />
+											</Col>
+											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Club" desc="Il y a des clubs qui se sont formés pour que les amis puissent s'entraîner, viens voir si tes amis font déjà parti d'un club." btn_url={this.lang.header_club_url} />
+											</Col>
+										</React.Fragment>)
+								}
 							</Row>
 						</div>
 					</Container>

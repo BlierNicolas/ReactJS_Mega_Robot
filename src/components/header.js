@@ -9,6 +9,7 @@ import {
     UncontrolledDropdown,
     DropdownToggle,
     DropdownMenu,
+    DropdownItem,
     Button
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
@@ -16,6 +17,7 @@ import cookie from 'react-cookies';
 import { auth, provider } from '../firebase.js';
 import 'firebase/database';
 import 'firebase/auth';
+import firebase from 'firebase/app';
 import lang_fr from '../langues/lang_fr.json';
 import lang_en from '../langues/lang_en.json';
 
@@ -43,8 +45,11 @@ export default class Header extends React.Component {
         this.state = {
             isOpen: false,
             user: null,
-            status: this.lang.btn_nuit_inactif
+            status: this.lang.btn_nuit_inactif,
+            usersIndiv: []
         };
+
+        this.userData = [];
 
         this.nightMode = false
         //this.status = this.lang.btn_nuit_inactif
@@ -54,29 +59,40 @@ export default class Header extends React.Component {
             this.mounted = cookie.load('c_nightMode');
             this.checkActif();
         }
+
+        firebase.auth().onAuthStateChanged(user => {
+            // currentUser is ready now.
+            if (user) {
+                //console.log(firebase.auth().currentUser);
+                this.setState({ user: firebase.auth().currentUser })
+                this.checkAccount();
+                // User signed in. You can also access from firebase.auth().currentUser.
+            } else {
+                // User signed out.
+            }
+        });
     }
 
     onEntering() {
-        this.setState({status: this.lang.btn_nuit_desactivation});
+        this.setState({ status: this.lang.btn_nuit_desactivation });
     }
 
     onEntered() {
-        this.setState({status: this.lang.btn_nuit_inactif});
+        this.setState({ status: this.lang.btn_nuit_inactif });
         //cookie.save('c_nightMode', 'off', { path: '/' });
     }
 
     onExiting() {
-        this.setState({status: this.lang.btn_nuit_activation});
+        this.setState({ status: this.lang.btn_nuit_activation });
     }
 
     onExited() {
-        this.setState({status: this.lang.btn_nuit_actif});
+        this.setState({ status: this.lang.btn_nuit_actif });
         //cookie.save('c_nightMode', 'on', { path: '/' });
     }
 
     componentDidMount() {
         //this.nightMode = !this.nightMode;
-        console.log("CompotDidMount: " + this.nightMode)
         if (typeof window !== "undefined") {
             auth.onAuthStateChanged((user) => {
                 if (user) {
@@ -98,13 +114,13 @@ export default class Header extends React.Component {
         //console.log(this.nightMode);
 
         if (this.nightMode === true) {
-            this.setState({status: this.lang.btn_nuit_actif});
+            this.setState({ status: this.lang.btn_nuit_actif });
             //console.log(this.state.status);
             this.nightMode = true
             cookie.save('c_nightMode', 'on', { path: '/' });
             //console.log("ToggleNight: Actif");
         } else {
-            this.setState({status: this.lang.btn_nuit_inactif});
+            this.setState({ status: this.lang.btn_nuit_inactif });
             //console.log(this.state.status);
             this.nightMode = false
             cookie.save('c_nightMode', 'off', { path: '/' });
@@ -118,7 +134,7 @@ export default class Header extends React.Component {
         if (typeof document !== "undefined") {
             if (this.mounted === 'on') {
                 this.nightMode = true;
-                this.setState({status: this.lang.btn_nuit_actif});
+                this.setState({ status: this.lang.btn_nuit_actif });
                 this.mounted = undefined;
             }
             if (this.nightMode) {
@@ -153,7 +169,59 @@ export default class Header extends React.Component {
                         user
                     });
                     cookie.save('lecteur_connect', this.state.user, { path: '/' });
+                    //this.checkAccount();
                 });
+        }
+
+    }
+
+    checkAccount() {
+        if (typeof window !== "undefined") {
+            if (this.state.user !== null) {
+                let listUsers = firebase.database().ref('mr_users');
+                listUsers.on('value', (snapshot) => {
+                    let usersIndiv = snapshot.val();
+                    let newState = [];
+                    let userFound = false;
+                    for (let item in usersIndiv) {
+                        if (usersIndiv[item].user === this.state.user.email) {
+                            this.userData = usersIndiv[item];
+                            newState.push({
+                                id: item,
+                                user: this.state.user.email,
+                                ferraille: usersIndiv[item].ferraille,
+                                prestige: usersIndiv[item].prestige,
+                                fightWin: usersIndiv[item].fightWin,
+                                fightLose: usersIndiv[item].fightLose,
+                                username: usersIndiv[item].username
+                            });
+                            //console.log("User trouvé")
+                            userFound = true;
+                        }
+                    }
+
+                    if (!userFound) {
+                        const newUser = {
+                            user: this.state.user.email,
+                            username: this.state.user.displayName,
+                            ferraille: 0,
+                            prestige: 0,
+                            fightWin: 0,
+                            fightLose: 0
+                        }
+
+                        listUsers.push(newUser);
+                        //console.log("New user créé")
+                        //CreateIt
+                    } else {
+                        //LoadIt
+                    }
+
+                    if (!this.state.loaded) {
+                        this.setState({ loaded: true });
+                    }
+                });
+            }
         }
     }
 
@@ -192,16 +260,38 @@ export default class Header extends React.Component {
                             <UncontrolledDropdown nav inNavbar>
                                 <DropdownToggle nav caret className="text-white">
                                     {this.state.user ?
-                                        this.state.user.displayName
+                                        this.userData.username
                                         :
                                         <span>{this.lang.header_connexion}</span>
                                     }
                                 </DropdownToggle>
                                 <DropdownMenu right className="no-padding">
                                     {this.state.user ?
-                                        <div>
-                                            <Button color="primary" onClick={this.logout}>{this.lang.header_logout}</Button>
-                                        </div>
+                                        (
+                                            <>
+                                                <DropdownItem>
+                                                    <Link to={this.lang.header_armurerie_url + "/"}>{this.lang.header_armurerie}</Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to={this.lang.header_magasin_url + "/"}>{this.lang.header_magasin}</Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to={this.lang.header_histoire_url + "/"}>{this.lang.header_histoire}</Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to={this.lang.header_tournois_url + "/"}>{this.lang.header_tournois}</Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to={this.lang.header_club_url + "/"}>{this.lang.header_club}</Link>
+                                                </DropdownItem>
+                                                <DropdownItem>
+                                                    <Link to={this.lang.header_profil_url + "/"}>{this.lang.header_profil}</Link>
+                                                </DropdownItem>
+                                                <div>
+                                                    <Button color="primary" onClick={this.logout}>{this.lang.header_logout}</Button>
+                                                </div>
+                                            </>
+                                        )
                                         :
                                         <div>
                                             <Button color="primary" onClick={this.login}>{this.lang.header_login}</Button>

@@ -6,8 +6,8 @@
 * Boutons
 * * Vers les règles
 * * Vers le profil démo
-* * Infos sur les tournois
 * * Infos sur l'histoire
+* * Infos sur les tournois
 * * Infos sur les clubs
 * Nombre du site (nombre d'entraîneurs, nombre de clubs, nombre de tournois et autres nombres intéressants)
 * Footer

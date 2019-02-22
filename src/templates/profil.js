@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { graphql } from "gatsby";
 import PropTypes from 'prop-types';
-import Link from 'gatsby-link'
+// import Link from 'gatsby-link'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
 	Container,
@@ -12,7 +12,7 @@ import {
 import Header from '../components/header'
 import Footer from '../components/footer'
 import EquivURL from '../components/equivURL';
-import Teaser from '../components/teaser';
+import ProfileChange from '../components/profileChange';
 import cookie from 'react-cookies';
 import Helmet from 'react-helmet'
 import lang_fr from '../langues/lang_fr.json';
@@ -47,15 +47,15 @@ class ProfilPage extends Component {
 		}
 	}
 
-	render() {
-		const {
-			data
-		} = this.props
+	myCallback = (dataFromChild) => {
+		this.setState({username : dataFromChild})
+	}
 
+	render() {
 		return (
 			<Layout>
 				<div id="page-wrapper">
-					<Helmet title={this.lang.header_accueil + this.lang.meta_title}></Helmet>
+					<Helmet title={this.lang.header_profil + this.lang.meta_title}></Helmet>
 
 					<Header lang={this.props.pageContext.lang} />
 
@@ -63,24 +63,15 @@ class ProfilPage extends Component {
 
 					<Jumbotron fluid>
 						<Container fluid>
-							<h1 className="display-3 display-title">{this.lang.accueil_jumbo_titre}</h1>
-							<p className="lead">{this.lang.accueil_jumbo_parag_1}</p>
-							<p className="lead">{this.lang.accueil_jumbo_parag_2}</p>
-							<Link className="btn btn-primary" to={this.lang.header_regles_url + "/"}>{this.lang.accueil_jumbo_btn_titre}</Link>
+							<h1 className="display-3 display-title">Profil de {this.state.username}</h1>
 						</Container>
 					</Jumbotron>
 
 					<Container fluid className="p-0">
 						<div className="pb-5">
 							<Row>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
-								</Col>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
-								</Col>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
+								<Col lg={{ size: 6, offset: 3 }}>
+									<ProfileChange callbackFromParent={this.myCallback} />
 								</Col>
 							</Row>
 						</div>
