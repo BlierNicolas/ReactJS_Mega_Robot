@@ -69,6 +69,7 @@ export default class Header extends React.Component {
                 // User signed in. You can also access from firebase.auth().currentUser.
             } else {
                 // User signed out.
+                //console.log("Pas de user")
             }
         });
     }
@@ -169,7 +170,7 @@ export default class Header extends React.Component {
                         user
                     });
                     cookie.save('lecteur_connect', this.state.user, { path: '/' });
-                    //this.checkAccount();
+                    this.checkAccount();
                 });
         }
 
@@ -250,6 +251,20 @@ export default class Header extends React.Component {
                                     onExited={this.onExited}
                                 >
                                 </Collapse>
+                            </NavItem>
+                            <NavItem>
+                                {this.state.user ?
+                                    (<div className="text-white nav-link">Ferraille: {this.userData.ferraille}</div>)
+                                    :
+                                    ('')
+                                }
+                            </NavItem>
+                            <NavItem>
+                                {this.state.user ?
+                                    (<div className="text-white nav-link">Prestige: {this.userData.prestige}</div>)
+                                    :
+                                    ('')
+                                }
                             </NavItem>
                             <NavItem>
                                 <Link to={this.lang.header_accueil_url} className="text-white nav-link">{this.lang.header_accueil}</Link>
