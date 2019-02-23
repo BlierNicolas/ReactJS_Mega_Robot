@@ -4,15 +4,15 @@ exports.createPages = ({ graphql, actions }) => {
 	const { createPage } = actions
 	return new Promise((resolve, reject) => {
 		const indexTemplate = path.resolve('src/templates/index.js')
-		// const chapitreTemplate = path.resolve('src/templates/chapitre.js')
-		// const romanTemplate = path.resolve('src/templates/roman.js')
-		// const personnageTemplate = path.resolve('src/templates/personnage.js')
-		// const pouvoirTemplate = path.resolve('src/templates/pouvoir.js')
-		// const nouvelleTemplate = path.resolve('src/templates/nouvelle.js')
-		// const groupeTemplate = path.resolve('src/templates/groupe.js')
-		// const theorieTemplate = path.resolve('src/templates/theorie.js')
-		// const listeHistoireTemplate = path.resolve('src/templates/histoires.js')
-		// const progressionTemplate = path.resolve('src/templates/progression.js')
+		const reglesTemplate = path.resolve('src/templates/regles.js')
+		const profilTemplate = path.resolve('src/templates/profil.js')
+		const armurerieTemplate = path.resolve('src/templates/armurerie.js')
+		const ameliorationTemplate = path.resolve('src/templates/amelioration.js')
+		const magasinTemplate = path.resolve('src/templates/magasin.js')
+		const histoireTemplate = path.resolve('src/templates/histoire.js')
+		const combatTemplate = path.resolve('src/templates/combat.js')
+		const tournoisTemplate = path.resolve('src/templates/tournois.js')
+		const clubTemplate = path.resolve('src/templates/club.js')
 		// const listePersonnageTemplate = path.resolve('src/templates/personnages.js')
 		// const listePouvoirTemplate = path.resolve('src/templates/pouvoirs.js')
 		// const listeNouvelleTemplate = path.resolve('src/templates/nouvelles.js')
@@ -146,53 +146,25 @@ exports.createPages = ({ graphql, actions }) => {
 		/** S'occupe de générer toutes les sortes de pages sous les deux langues disponibles */
 		resolve(
 			singlePage('/', indexTemplate, "fr-CA"),
-			singlePage('en/', indexTemplate, "en-US")
-			// multiPage(`{allContentfulChapitre(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug}}}}`, 'Chapitre', 'histoires/chapitre/', chapitreTemplate, "fr-CA"),
-			// multiPage(`{allContentfulChapitre(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug}}}}`, 'Chapitre', 'en/stories/chapter/', chapitreTemplate, "en-US"),
-			// multiPage(`{allContentfulRoman(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug}}}}`, 'Roman', 'histoires/', romanTemplate, "fr-CA"),
-			// multiPage(`{allContentfulRoman(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug}}}}`, 'Roman', 'en/stories/', romanTemplate, "en-US"),
-			// singlePage('histoires', listeHistoireTemplate, "fr-CA"),
-			// singlePage('en/stories', listeHistoireTemplate, "en-US"),
-			// singlePage('calendrier', calendrierTemplate, "fr-CA"),
-			// singlePage('en/calendar', calendrierTemplate, "en-US"),
-			// singlePage('progression', progressionTemplate, "fr-CA"),
-			// singlePage('en/progression', progressionTemplate, "en-US"),
-			// singlePage('projets', listeProjetsTemplate, "fr-CA"),
-			// singlePage('en/projects', listeProjetsTemplate, "en-US"),
-			// multiPage(`{allContentfulProject(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug node_locale}}}}`, 'Project', 'projets/', projetTemplate, "fr-CA"),
-			// multiPage(`{allContentfulProject(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug node_locale}}}}`, 'Project', 'en/projects/', projetTemplate, "en-US"),
-			// singlePage('personnages', listePersonnageTemplate, "fr-CA"),
-			// singlePage('en/characters', listePersonnageTemplate, "en-US"),
-			// multiPage(`{allContentfulPersonnage(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug}}}}`, 'Personnage', 'personnages/', personnageTemplate, "fr-CA"),
-			// multiPage(`{allContentfulPersonnage(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug}}}}`, 'Personnage', 'en/characters/', personnageTemplate, "en-US"),
-			// singlePage('pouvoirs', listePouvoirTemplate, "fr-CA"),
-			// singlePage('en/powers', listePouvoirTemplate, "en-US"),
-			// multiPage(`{allContentfulPouvoir(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug}}}}`, 'Pouvoir', 'pouvoirs/', pouvoirTemplate, "fr-CA"),
-			// multiPage(`{allContentfulPouvoir(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug}}}}`, 'Pouvoir', 'en/powers/', pouvoirTemplate, "en-US"),
-			// singlePage('nouvelles', listeNouvelleTemplate, "fr-CA"),
-			// singlePage('en/news', listeNouvelleTemplate, "en-US"),
-			// multiPage(`{allContentfulNouvelle(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug node_locale}}}}`, 'Nouvelle', 'nouvelles/', nouvelleTemplate, "fr-CA"),
-			// multiPage(`{allContentfulNouvelle(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug node_locale}}}}`, 'Nouvelle', 'en/news/', nouvelleTemplate, "en-US"),
-			// singlePage('groupes', listeGroupeTemplate, "fr-CA"),
-			// singlePage('en/groups', listeGroupeTemplate, "en-US"),
-			// multiPage(`{allContentfulGroupe(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug node_locale }}}}`, 'Groupe', 'groupes/', groupeTemplate, "fr-CA"),
-			// multiPage(`{allContentfulGroupe(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug node_locale}}}}`, 'Groupe', 'en/groups/', groupeTemplate, "en-US"),
-			// multiPageSpe(`{allContentfulMonde(filter: {node_locale: {eq: "fr-CA"}}) {edges {node { id slug node_locale}}}}`, 'Monde', '', mondeTemplate, "fr-CA"),
-			// multiPageSpe(`{allContentfulMonde(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug node_locale}}}}`, 'Monde', "en/", mondeTemplate, "en-US"),
-			// multiPage(`{allContentfulPays(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug node_locale}}}}`, 'Pays', 'giervia/', paysTemplate, "fr-CA"),
-			// multiPage(`{allContentfulPays(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug node_locale}}}}`, 'Pays', 'en/giervia/', paysTemplate, "en-US"),
-			// multiPageSpe2(`{allContentfulVille(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug slugPaysParent node_locale}}}}`, 'Ville', 'giervia/', villeTemplate, "fr-CA"),
-			// multiPageSpe2(`{allContentfulVille(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug slugPaysParent node_locale}}}}`, 'Ville', 'en/giervia/', villeTemplate, "en-US"),
-			// singlePage('evenements', evenementsTemplate, "fr-CA"),
-			// singlePage('en/events', evenementsTemplate, "en-US"),
-			// singlePage('nombre', nombreTemplate, "fr-CA"),
-			// singlePage('en/number', nombreTemplate, "en-US"),
-			// singlePage('contributeurs', contributeursTemplate, "fr-CA"),
-			// singlePage('en/contributors', contributeursTemplate, "en-US"),
-			// singlePage('encyclopedie', listeTheorieTemplate, "fr-CA"),
-			// singlePage('en/encyclopedia', listeTheorieTemplate, "en-US"),
-			// multiPage(`{allContentfulTheorie(filter: {node_locale: {eq: "fr-CA"}}) {edges {node {id slug node_locale}}}}`, 'Theorie', 'encyclopedie/', theorieTemplate, "fr-CA"),
-			// multiPage(`{allContentfulTheorie(filter: {node_locale: {eq: "en-US"}}) {edges {node {id slug node_locale}}}}`, 'Theorie', 'en/encyclopedia/', theorieTemplate, "en-US")
+			singlePage('en/', indexTemplate, "en-US"),
+			singlePage('regles', reglesTemplate, "fr-CA"),
+			singlePage('en/rules', reglesTemplate, "en-US"),
+			singlePage('profil', profilTemplate, "fr-CA"),
+			singlePage('en/profile', profilTemplate, "en-US"),
+			singlePage('armurerie', armurerieTemplate, "fr-CA"),
+			singlePage('en/weaponry', armurerieTemplate, "en-US"),
+			singlePage('amelioration', ameliorationTemplate, "fr-CA"),
+			singlePage('en/upgrade', ameliorationTemplate, "en-US"),
+			singlePage('magasin', magasinTemplate, "fr-CA"),
+			singlePage('en/shop', magasinTemplate, "en-US"),
+			singlePage('histoire', histoireTemplate, "fr-CA"),
+			singlePage('en/storie', histoireTemplate, "en-US"),
+			singlePage('combat', combatTemplate, "fr-CA"),
+			singlePage('en/fight', combatTemplate, "en-US"),
+			singlePage('tournois', tournoisTemplate, "fr-CA"),
+			singlePage('en/tournament', tournoisTemplate, "en-US"),
+			singlePage('club', clubTemplate, "fr-CA"),
+			singlePage('en/club', clubTemplate, "en-US")
 		)
 	})
 }
