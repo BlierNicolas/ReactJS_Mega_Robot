@@ -96,9 +96,9 @@ ArmureriePage.propTypes = {
 export default ArmureriePage
 
 export const pageQuery = graphql`query test3 {
-    site {
+		site {
 		siteMetadata {
-		  	title
+				title
 		}
 	}
-  }`
+	}`

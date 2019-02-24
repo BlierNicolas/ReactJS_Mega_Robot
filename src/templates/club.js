@@ -96,7 +96,7 @@ ClubPage.propTypes = {
 export default ClubPage
 
 export const pageQuery = graphql`query test4 {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}

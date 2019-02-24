@@ -8,14 +8,14 @@ import '../../css/style.css'
 const Layout = ({ children }) => (
 	<StaticQuery
 		query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
-          }
-        }
-      }
-    `}
+			query SiteTitleQuery {
+				site {
+					siteMetadata {
+						title
+					}
+				}
+			}
+		`}
 		render={data => (
 			<>
 				<Helmet

@@ -96,7 +96,7 @@ TournoisPage.propTypes = {
 export default TournoisPage
 
 export const pageQuery = graphql`query test10 {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}

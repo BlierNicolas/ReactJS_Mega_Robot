@@ -96,7 +96,7 @@ ReglesPage.propTypes = {
 export default ReglesPage
 
 export const pageQuery = graphql`query test9 {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}

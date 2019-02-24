@@ -91,7 +91,7 @@ ProfilPage.propTypes = {
 export default ProfilPage
 
 export const pageQuery = graphql`query test8 {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}

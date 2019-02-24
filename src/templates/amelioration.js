@@ -96,7 +96,7 @@ AmeliorationPage.propTypes = {
 export default AmeliorationPage
 
 export const pageQuery = graphql`query test2 {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}

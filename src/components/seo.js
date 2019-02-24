@@ -85,12 +85,12 @@ export default SEO
 
 const detailsQuery = graphql`
   query DefaultSEOQuery {
-    site {
-      siteMetadata {
-        title
-        description
-        author
-      }
-    }
+	site {
+	  siteMetadata {
+		title
+		description
+		author
+	  }
+	}
   }
 `

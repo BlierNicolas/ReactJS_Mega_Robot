@@ -96,7 +96,7 @@ CombatPage.propTypes = {
 export default CombatPage
 
 export const pageQuery = graphql`query test5 {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}

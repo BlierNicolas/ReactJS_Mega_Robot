@@ -96,7 +96,7 @@ MagasinPage.propTypes = {
 export default MagasinPage
 
 export const pageQuery = graphql`query test7 {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}

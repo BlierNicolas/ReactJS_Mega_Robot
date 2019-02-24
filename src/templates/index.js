@@ -129,7 +129,7 @@ IndexPage.propTypes = {
 export default IndexPage
 
 export const pageQuery = graphql`query test {
-    site {
+	site {
 		siteMetadata {
 		  	title
 		}
