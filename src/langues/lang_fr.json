@@ -1,5 +1,5 @@
 {
-	"meta_title": " | L'Univers des Nouveaux Humains",
+	"meta_title": " | Mega Robots",
 	"btn_nuit": "Mode nuit ",
 	"btn_nuit_actif": "actif",
 	"btn_nuit_inactif": "inactif",
@@ -48,6 +48,8 @@
 	"accueil_jumbo_parag_1": "Mega Robot est une organisation possédant une technologique orientée sur le combat qui permet de régler divers conflits ou à simplement divertir les foules.",
 	"accueil_jumbo_parag_2": "Entrez dans la course pour détenir les robots les plus puissants et vaincre les leaders dans cette organisation.",
 	"accueil_jumbo_btn_titre": "Entrer dans l'Univers",
+	"armurerie_jumbo_titre": "Votre armurerie",
+	"armurerie_jumbo_parag_1": "C'est ici que vous allez gérer vos robots et leur équipement",
 	"nouvelles_titre": "Dernières nouvelles",
 	"calendrier_titre": "Prochaines sorties",
 	"block_info_titre": "La création de l'Univers",

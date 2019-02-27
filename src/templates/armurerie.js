@@ -7,12 +7,21 @@ import {
 	Container,
 	Jumbotron,
 	Row,
-	Col
+	Col,
+	TabContent,
+	TabPane,
+	Nav,
+	NavItem,
+	NavLink,
+	Card,
+	Button,
+	CardTitle,
+	CardText
 } from 'reactstrap';
 import Header from '../components/header'
 import Footer from '../components/footer'
 import EquivURL from '../components/equivURL';
-import Teaser from '../components/teaser';
+import classnames from 'classnames';
 import cookie from 'react-cookies';
 import Helmet from 'react-helmet'
 import lang_fr from '../langues/lang_fr.json';
@@ -38,6 +47,11 @@ class ArmureriePage extends Component {
 		if (this.props.pageContext.lang === "fr-CA") { this.lang = lang_fr; }
 		if (this.props.pageContext.lang === "en-US") { this.lang = lang_en; }
 
+		this.toggle = this.toggle.bind(this);
+		this.state = {
+			activeTab: '1'
+		};
+
 		if (cookie.load('lecteur_connect') == null) {
 			cookie.save('lecteur_connect', "vide", { path: '/' });
 		}
@@ -47,11 +61,19 @@ class ArmureriePage extends Component {
 		}
 	}
 
+	toggle(tab) {
+		if (this.state.activeTab !== tab) {
+			this.setState({
+				activeTab: tab
+			});
+		}
+	}
+
 	render() {
 		return (
 			<Layout>
 				<div id="page-wrapper">
-					<Helmet title={this.lang.header_accueil + this.lang.meta_title}></Helmet>
+					<Helmet title={this.lang.header_armurerie + this.lang.meta_title}></Helmet>
 
 					<Header lang={this.props.pageContext.lang} />
 
@@ -59,26 +81,77 @@ class ArmureriePage extends Component {
 
 					<Jumbotron fluid>
 						<Container fluid>
-							<h1 className="display-3 display-title">{this.lang.accueil_jumbo_titre}</h1>
-							<p className="lead">{this.lang.accueil_jumbo_parag_1}</p>
-							<p className="lead">{this.lang.accueil_jumbo_parag_2}</p>
-							<Link className="btn btn-primary" to={this.lang.header_regles_url + "/"}>{this.lang.accueil_jumbo_btn_titre}</Link>
+							<h1 className="display-3 display-title">{this.lang.armurerie_jumbo_titre}</h1>
+							<p className="lead">{this.lang.armurerie_jumbo_parag_1}</p>
 						</Container>
 					</Jumbotron>
 
-					<Container fluid className="p-0">
+					<Container fluid>
 						<div className="pb-5">
-							<Row>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
-								</Col>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
-								</Col>
-								<Col lg="4" md="4" sm="6" xs="12">
-									<Teaser titre="Test" desc="Description" btn_label="Label" />
-								</Col>
-							</Row>
+							<Nav pills>
+								<NavItem className="cursor-update">
+									<NavLink className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.toggle('1'); }}>
+										Nom de l'armure 1
+            						</NavLink>
+								</NavItem>
+								<NavItem className="cursor-update">
+									<NavLink className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.toggle('2'); }}>
+										Moar Tabs
+            						</NavLink>
+								</NavItem>
+							</Nav>
+							<TabContent activeTab={this.state.activeTab}>
+								<TabPane tabId="1">
+									<Row>
+										<Col sm="6" className="my-3">
+											<Card body>
+												<CardTitle>Special Title Treatment</CardTitle>
+												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+												<Button>Go somewhere</Button>
+											</Card>
+										</Col>
+										<Col sm="6" className="my-3">
+											<Card body>
+												<CardTitle>Special Title Treatment</CardTitle>
+												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+												<Button>Go somewhere</Button>
+											</Card>
+										</Col>
+										<Col sm="6" className="my-3">
+											<Card body>
+												<CardTitle>Special Title Treatment</CardTitle>
+												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+												<Button>Go somewhere</Button>
+											</Card>
+										</Col>
+										<Col sm="6" className="my-3">
+											<Card body>
+												<CardTitle>Special Title Treatment</CardTitle>
+												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+												<Button>Go somewhere</Button>
+											</Card>
+										</Col>
+									</Row>
+								</TabPane>
+								<TabPane tabId="2">
+									<Row className="my-3">
+										<Col sm="6">
+											<Card body>
+												<CardTitle>Special Title Treatment</CardTitle>
+												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+												<Button>Go somewhere</Button>
+											</Card>
+										</Col>
+										<Col sm="6">
+											<Card body>
+												<CardTitle>Special Title Treatment</CardTitle>
+												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+												<Button>Go somewhere</Button>
+											</Card>
+										</Col>
+									</Row>
+								</TabPane>
+							</TabContent>
 						</div>
 					</Container>
 
