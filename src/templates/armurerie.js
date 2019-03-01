@@ -103,32 +103,64 @@ class ArmureriePage extends Component {
 							<TabContent activeTab={this.state.activeTab}>
 								<TabPane tabId="1">
 									<Row>
-										<Col sm="6" className="my-3">
+										<Col sm="3" className="my-3">
 											<Card body>
-												<CardTitle>Special Title Treatment</CardTitle>
-												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-												<Button>Go somewhere</Button>
+												<CardTitle>[nom] [tier]</CardTitle>
+												<CardText>
+													Élément: [element]<br />
+													Niveau: [niveau]<br />
+													Expérience: [experience]/([niveau*10+10])<br />
+													Vie: [vie] <br />
+													Points d'amelioration: [ameliorationPoint] <br />
+													Bonus 1: [bonus1]<br />
+													Bonus 2: [bonus2]
+												</CardText>
+												<Button>Changer pour un autre membre</Button>
 											</Card>
 										</Col>
-										<Col sm="6" className="my-3">
+										<Col sm="3" className="my-3">
 											<Card body>
-												<CardTitle>Special Title Treatment</CardTitle>
-												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-												<Button>Go somewhere</Button>
+												<CardTitle>[nom] [tier]</CardTitle>
+												<CardText>
+													Élément: [element]<br />
+													Niveau: [niveau]<br />
+													Expérience: [experience]/([niveau*10+10])<br />
+													Vie: [vie] <br />
+													Points d'amelioration: [ameliorationPoint] <br />
+													Bonus 1: [bonus1]<br />
+													Bonus 2: [bonus2]
+												</CardText>
+												<Button>Changer pour un autre membre</Button>
 											</Card>
 										</Col>
-										<Col sm="6" className="my-3">
+										<Col sm="3" className="my-3">
 											<Card body>
-												<CardTitle>Special Title Treatment</CardTitle>
-												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-												<Button>Go somewhere</Button>
+												<CardTitle>[nom] [tier]</CardTitle>
+												<CardText>
+													Élément: [element]<br />
+													Niveau: [niveau]<br />
+													Expérience: [experience]/([niveau*10+10])<br />
+													Vie: [vie] <br />
+													Points d'amelioration: [ameliorationPoint] <br />
+													Bonus 1: [bonus1]<br />
+													Bonus 2: [bonus2]
+												</CardText>
+												<Button>Changer pour un autre membre</Button>
 											</Card>
 										</Col>
-										<Col sm="6" className="my-3">
+										<Col sm="3" className="my-3">
 											<Card body>
-												<CardTitle>Special Title Treatment</CardTitle>
-												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-												<Button>Go somewhere</Button>
+												<CardTitle>[nom] [tier]</CardTitle>
+												<CardText>
+													Élément: [element]<br />
+													Niveau: [niveau]<br />
+													Expérience: [experience]/([niveau*10+10])<br />
+													Vie: [vie] <br />
+													Points d'amelioration: [ameliorationPoint] <br />
+													Bonus 1: [bonus1]<br />
+													Bonus 2: [bonus2]
+												</CardText>
+												<Button>Changer pour un autre membre</Button>
 											</Card>
 										</Col>
 									</Row>
