@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { graphql } from "gatsby";
 import PropTypes from 'prop-types';
-import Link from 'gatsby-link'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
 	Container,
@@ -12,15 +11,12 @@ import {
 	TabPane,
 	Nav,
 	NavItem,
-	NavLink,
-	Card,
-	Button,
-	CardTitle,
-	CardText
+	NavLink
 } from 'reactstrap';
 import Header from '../components/header'
 import Footer from '../components/footer'
 import EquivURL from '../components/equivURL';
+import ArmorDisplayMember from '../components/armorDisplayMember';
 import classnames from 'classnames';
 import cookie from 'react-cookies';
 import Helmet from 'react-helmet'
@@ -49,7 +45,8 @@ class ArmureriePage extends Component {
 
 		this.toggle = this.toggle.bind(this);
 		this.state = {
-			activeTab: '1'
+			activeTab: '1',
+			username: ""
 		};
 
 		if (cookie.load('lecteur_connect') == null) {
@@ -59,6 +56,10 @@ class ArmureriePage extends Component {
 		if (cookie.load('lecteur_connect') !== "vide") {
 			this.state.lecteur = cookie.load('lecteur_connect')
 		}
+	}
+
+	myCallback = (dataFromChild) => {
+		this.setState({username : dataFromChild})
 	}
 
 	toggle(tab) {
@@ -103,83 +104,27 @@ class ArmureriePage extends Component {
 							<TabContent activeTab={this.state.activeTab}>
 								<TabPane tabId="1">
 									<Row>
-										<Col sm="3" className="my-3">
-											<Card body>
-												<CardTitle>[nom] [tier]</CardTitle>
-												<CardText>
-													Élément: [element]<br />
-													Niveau: [niveau]<br />
-													Expérience: [experience]/([niveau*10+10])<br />
-													Vie: [vie] <br />
-													Points d'amelioration: [ameliorationPoint] <br />
-													Bonus 1: [bonus1]<br />
-													Bonus 2: [bonus2]
-												</CardText>
-												<Button>Changer pour un autre membre</Button>
-											</Card>
+										<Col lg="3" md="6" sm="12" className="my-3">
+											<ArmorDisplayMember callbackFromParent={this.myCallback} />
 										</Col>
-										<Col sm="3" className="my-3">
-											<Card body>
-												<CardTitle>[nom] [tier]</CardTitle>
-												<CardText>
-													Élément: [element]<br />
-													Niveau: [niveau]<br />
-													Expérience: [experience]/([niveau*10+10])<br />
-													Vie: [vie] <br />
-													Points d'amelioration: [ameliorationPoint] <br />
-													Bonus 1: [bonus1]<br />
-													Bonus 2: [bonus2]
-												</CardText>
-												<Button>Changer pour un autre membre</Button>
-											</Card>
+										<Col lg="3" md="6" sm="12" className="my-3">
+											<ArmorDisplayMember callbackFromParent={this.myCallback} />
 										</Col>
-										<Col sm="3" className="my-3">
-											<Card body>
-												<CardTitle>[nom] [tier]</CardTitle>
-												<CardText>
-													Élément: [element]<br />
-													Niveau: [niveau]<br />
-													Expérience: [experience]/([niveau*10+10])<br />
-													Vie: [vie] <br />
-													Points d'amelioration: [ameliorationPoint] <br />
-													Bonus 1: [bonus1]<br />
-													Bonus 2: [bonus2]
-												</CardText>
-												<Button>Changer pour un autre membre</Button>
-											</Card>
+										<Col lg="3" md="6" sm="12" className="my-3">
+											<ArmorDisplayMember callbackFromParent={this.myCallback} />
 										</Col>
-										<Col sm="3" className="my-3">
-											<Card body>
-												<CardTitle>[nom] [tier]</CardTitle>
-												<CardText>
-													Élément: [element]<br />
-													Niveau: [niveau]<br />
-													Expérience: [experience]/([niveau*10+10])<br />
-													Vie: [vie] <br />
-													Points d'amelioration: [ameliorationPoint] <br />
-													Bonus 1: [bonus1]<br />
-													Bonus 2: [bonus2]
-												</CardText>
-												<Button>Changer pour un autre membre</Button>
-											</Card>
+										<Col lg="3" md="6" sm="12" className="my-3">
+											<ArmorDisplayMember callbackFromParent={this.myCallback} />
 										</Col>
 									</Row>
 								</TabPane>
 								<TabPane tabId="2">
 									<Row className="my-3">
 										<Col sm="6">
-											<Card body>
-												<CardTitle>Special Title Treatment</CardTitle>
-												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-												<Button>Go somewhere</Button>
-											</Card>
+
 										</Col>
 										<Col sm="6">
-											<Card body>
-												<CardTitle>Special Title Treatment</CardTitle>
-												<CardText>With supporting text below as a natural lead-in to additional content.</CardText>
-												<Button>Go somewhere</Button>
-											</Card>
+
 										</Col>
 									</Row>
 								</TabPane>
