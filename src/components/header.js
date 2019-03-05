@@ -194,9 +194,11 @@ export default class Header extends React.Component {
 								prestige: usersIndiv[item].prestige,
 								fightWin: usersIndiv[item].fightWin,
 								fightLose: usersIndiv[item].fightLose,
-								username: usersIndiv[item].username
+								username: usersIndiv[item].username,
+								isArmorGen: usersIndiv[item].isArmorGen
 							});
 							//console.log("User trouvé")
+							console.log(item)
 							userFound = true;
 						}
 					}
@@ -208,10 +210,12 @@ export default class Header extends React.Component {
 							ferraille: 0,
 							prestige: 0,
 							fightWin: 0,
-							fightLose: 0
+							fightLose: 0,
+							isArmorGen: true
 						}
 
 						listUsers.push(newUser);
+						
 						//console.log("New user créé")
 						//CreateIt
 					} else {
@@ -224,6 +228,43 @@ export default class Header extends React.Component {
 				});
 			}
 		}
+	}
+
+	createArmor(idUser) {
+		let listArmures = firebase.database().ref('mr_armor');
+
+		const newArmure = {
+
+		}
+	}
+
+	createMember(idUser) {
+	// 	let listMembres = firebase.database().ref('mr_member');
+
+	// 	const newMemberLeftArm = {
+	// 		userId:
+	// 		// - idUser
+	// 		// - nom
+	// 		// - vie
+	// 		// - tier
+	// 		// - niveau
+	// 		// - experience
+	// 		// - element
+	// 		// - isLock
+	// 		// - bonus1
+	// 		// - bonus2
+	// 		// - ameliorationPoint
+	// 		// - eau1
+	// 		// - eau2
+	// 		// - eau3
+	// 		// - feu1
+	// 		// - feu2
+	// 		// - feu3
+	// 		// - terre1
+	// 		// - terre2
+	// 		// - terre3
+	// 		// - neutre1
+	// }
 	}
 
 	render() {
