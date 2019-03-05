@@ -33,7 +33,13 @@ class ArmureriePage extends Component {
 			username: '',
 			items: [],
 			connectedUser: null,
-			lecteur: "vide"
+			lecteur: "vide",
+			idUser: '',
+			idArmure: '',
+			idBrasGauche: '',
+			idBrasDroit: '',
+			idCasque: '',
+			idJambes: ''
 		}
 
 		/** Buffer de la langue par défaut */
@@ -95,11 +101,11 @@ class ArmureriePage extends Component {
 										Nom de l'armure 1
             						</NavLink>
 								</NavItem>
-								<NavItem className="cursor-update">
+								{/* <NavItem className="cursor-update">
 									<NavLink className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.toggle('2'); }}>
 										Moar Tabs
             						</NavLink>
-								</NavItem>
+								</NavItem> */}
 							</Nav>
 							<TabContent activeTab={this.state.activeTab}>
 								<TabPane tabId="1">
@@ -118,7 +124,7 @@ class ArmureriePage extends Component {
 										</Col>
 									</Row>
 								</TabPane>
-								<TabPane tabId="2">
+								{/* <TabPane tabId="2">
 									<Row className="my-3">
 										<Col sm="6">
 
@@ -127,7 +133,7 @@ class ArmureriePage extends Component {
 
 										</Col>
 									</Row>
-								</TabPane>
+								</TabPane> */}
 							</TabContent>
 						</div>
 					</Container>

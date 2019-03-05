@@ -103,7 +103,6 @@ export default class ProfileChange extends React.Component {
 							if (!userFound) {
 								if (usersIndiv[item].user === this.state.user.email) {
 									newState.push({
-										id: item,
 										user: this.state.user.email,
 										ferraille: usersIndiv[item].ferraille,
 										prestige: usersIndiv[item].prestige,
