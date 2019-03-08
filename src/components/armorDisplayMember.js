@@ -1,7 +1,7 @@
 import React from 'react'
 // import Link from 'gatsby-link'
 import {
-	Button,
+	// Button,
 	Card,
 	CardTitle,
 	CardText
@@ -148,7 +148,7 @@ export default class ArmorDisplayMember extends React.Component {
 						Bonus 1: [bonus1]<br />
 						Bonus 2: [bonus2]
 					</CardText>
-					<Button>Changer pour un autre membre</Button>
+					{/* <Button>Changer pour un autre membre</Button> */}
 				</Card>
 			</div>
 		);
