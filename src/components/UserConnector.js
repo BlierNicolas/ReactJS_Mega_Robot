@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'gatsby-link';
+import { connect } from 'react-redux'
 import {
     UncontrolledDropdown,
     DropdownToggle,
@@ -12,8 +13,9 @@ import { auth, provider } from '../firebase.js';
 import 'firebase/database';
 import 'firebase/auth';
 import firebase from 'firebase/app';
+import { chargeUserInfo, chargeUserData } from '../state/app';
 
-export default class UserConnector extends React.Component {
+class UserConnector extends React.Component {
     constructor(props) {
         super(props);
 
@@ -24,21 +26,32 @@ export default class UserConnector extends React.Component {
         this.createArmor = this.createArmor.bind(this);
 
         this.state = {
-            userData: [],
+            userData: { ferraille: 0, prestige: 0, username: '' },
             user: null,
-            isAuth: false
+            isAuth: false,
+            username: ''
         }
 
     }
 
     componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
+            //console.log(user)
             if (user) {
-                //console.log(firebase.auth().currentUser);
+                this.props.dispatch(chargeUserInfo(firebase.auth().currentUser))
+                console.log(firebase.auth().currentUser);
+                console.log(this.props.user.email)
                 this.setState({ user: firebase.auth().currentUser })
                 this.checkAccount();
             }
         });
+
+        if (cookie.load('lecteur_connect') !== "vide") {
+            console.log(cookie.load('lecteur_connect'))
+            this.props.dispatch(chargeUserInfo(cookie.load('lecteur_connect')))
+            console.log(this.props.user.email)
+            this.setState({ isAuth: true })
+        }
     }
 
     login() {
@@ -54,7 +67,10 @@ export default class UserConnector extends React.Component {
                     //this.state.user   à set state 
                     this.setState({ isAuth: true, user: user })
 
-                    console.log(user);
+                    this.props.dispatch(chargeUserInfo(result.user))
+                    console.log(firebase.auth().currentUser);
+                    console.log(this.props.user)
+
                     console.log(this.state.userData);
                     console.log(this.state.isAuth)
                 });
@@ -70,7 +86,7 @@ export default class UserConnector extends React.Component {
                         isAuth: false
                     });
                     cookie.save('lecteur_connect', "vide", { path: '/' });
-
+                    console.log("Deconnection")
                     window.location.reload();
                 });
         }
@@ -80,13 +96,15 @@ export default class UserConnector extends React.Component {
         let userFound = false;
         let scanDone = false;
         if (typeof window !== "undefined") {
-            if (this.state.user !== null) {
+            if (this.props.user !== null) {
                 let listUsers = firebase.database().ref('mr_users');
                 listUsers.on('value', (snapshot) => {
                     let usersIndiv = snapshot.val();
                     for (let item in usersIndiv) {
-                        if (usersIndiv[item].user === this.state.user.email) {
-                            this.setState({ userData: usersIndiv[item] });
+                        if (usersIndiv[item].user === this.props.user.email) {
+                            this.props.dispatch(chargeUserData(usersIndiv[item]))
+                            console.log(this.props.userData)
+                            //this.setState({ userData: usersIndiv[item] });
 
                             this.setState({ idUser: item });
 
@@ -110,8 +128,8 @@ export default class UserConnector extends React.Component {
 
                 if (!userFound && scanDone) {
                     const newUser = {
-                        user: this.state.user.email,
-                        username: this.state.user.displayName,
+                        user: this.props.user.email,
+                        username: this.props.user.displayName,
                         ferraille: 0,
                         prestige: 0,
                         fightWin: 0,
@@ -129,33 +147,34 @@ export default class UserConnector extends React.Component {
     }
 
     checkArmor(idUser) {
-        if (!this.state.userData.isArmorGen) {
-            //console.log(idUser)
-            this.createMember(idUser, "Bras Gauche", "Eau")
-            this.createMember(idUser, "Bras Droit", "Feu")
-            this.createMember(idUser, "Casque", "Neutre")
-            this.createMember(idUser, "Jambes", "Terre")
+        if (this.props.userData !== null) {
+            if (!this.props.userData.isArmorGen) {
+                //console.log(idUser)
+                this.createMember(idUser, "Bras Gauche", "Eau")
+                this.createMember(idUser, "Bras Droit", "Feu")
+                this.createMember(idUser, "Casque", "Neutre")
+                this.createMember(idUser, "Jambes", "Terre")
 
-            let idBrasGauche = ""
-            let idBrasDroit = ""
-            let idCasque = ""
-            let idJambes = ""
-            let idFound = 0
+                let idBrasGauche = ""
+                let idBrasDroit = ""
+                let idCasque = ""
+                let idJambes = ""
+                let idFound = 0
 
-            let listMembers = firebase.database().ref('mr_member');
-            listMembers.on('value', (snapshot) => {
-                let memberIndiv = snapshot.val();
-                for (let item1 in memberIndiv) {
-                    if (memberIndiv[item1].userId === idUser) {
-                        if (memberIndiv[item1].nom === "Bras Gauche") { idBrasGauche = item1; console.log(idBrasGauche); idFound++ }
-                        if (memberIndiv[item1].nom === "Bras Droit") { idBrasDroit = item1; console.log(idBrasDroit); idFound++ }
-                        if (memberIndiv[item1].nom === "Casque") { idCasque = item1; console.log(idCasque); idFound++ }
-                        if (memberIndiv[item1].nom === "Jambes") { idJambes = item1; console.log(idJambes); idFound++ }
-                        if (idFound === 4) { this.createArmor(idUser, idBrasGauche, idBrasDroit, idCasque, idJambes) }
+                let listMembers = firebase.database().ref('mr_member');
+                listMembers.on('value', (snapshot) => {
+                    let memberIndiv = snapshot.val();
+                    for (let item1 in memberIndiv) {
+                        if (memberIndiv[item1].userId === idUser) {
+                            if (memberIndiv[item1].nom === "Bras Gauche") { idBrasGauche = item1; console.log(idBrasGauche); idFound++ }
+                            if (memberIndiv[item1].nom === "Bras Droit") { idBrasDroit = item1; console.log(idBrasDroit); idFound++ }
+                            if (memberIndiv[item1].nom === "Casque") { idCasque = item1; console.log(idCasque); idFound++ }
+                            if (memberIndiv[item1].nom === "Jambes") { idJambes = item1; console.log(idJambes); idFound++ }
+                            if (idFound === 4) { this.createArmor(idUser, idBrasGauche, idBrasDroit, idCasque, idJambes) }
+                        }
                     }
-                }
-            })
-
+                })
+            }
         }
     }
 
@@ -209,10 +228,10 @@ export default class UserConnector extends React.Component {
     render() {
         return (<UncontrolledDropdown nav inNavbar>
             <DropdownToggle nav caret className="text-white">
-                {this.props.user ? this.props.username : <span>{this.props.lang.header_connexion}</span>}
+                {this.state.isAuth ? (this.props.userData !== null ? this.props.userData.username : '') : <span>{this.props.lang.header_connexion}</span>}
             </DropdownToggle>
             <DropdownMenu right className="no-padding">
-                {this.props.user ? <>
+                {this.state.isAuth ? <>
                     <DropdownItem>
                         <Link to={this.props.lang.header_armurerie_url + "/"}>{this.props.lang.header_armurerie}</Link>
                     </DropdownItem>
@@ -241,3 +260,8 @@ export default class UserConnector extends React.Component {
         </UncontrolledDropdown>);
     }
 }
+
+export default connect(state => ({
+    user: state.app.user,
+    userData: state.app.userData
+}), null)(UserConnector)

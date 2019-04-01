@@ -1,30 +1,41 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import {
     NavItem
 } from 'reactstrap';
+import cookie from 'react-cookies';
 
-export default class UserMetaInfo extends React.Component {
+class UserMetaInfo extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            userData: [],
             isAuth: false
         };
+    }
+
+    componentDidMount() {
+        if (cookie.load('lecteur_connect') !== "vide") {
+            this.setState({isAuth: true})
+		}
     }
 
     render() {
         return (
             this.state.isAuth ?
-                (<div>
+                (<React.Fragment>
                     <NavItem>
-                        <div className="text-white nav-link">Ferraille: {this.state.userData.ferraille}</div>
+                        <div className="text-white nav-link">Ferraille: {this.props.userData !== null ? this.props.userData.ferraille : 0}</div>
                     </NavItem>
                     <NavItem>
-                        <div className="text-white nav-link">Prestige: {this.state.userData.prestige}</div>
+                        <div className="text-white nav-link">Prestige: {this.props.userData !== null ? this.props.userData.prestige : 0}</div>
                     </NavItem>
-                </div>) :
+                </React.Fragment>) :
                 ('')
         );
     }
 }
+
+export default connect(state => ({
+    userData: state.app.userData
+}), null)(UserMetaInfo)

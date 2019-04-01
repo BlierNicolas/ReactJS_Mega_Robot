@@ -1,20 +1,22 @@
 import React from 'react'
 // import Link from 'gatsby-link'
+import { connect } from 'react-redux'
 import {
 	// Button,
 	Card,
 	CardTitle,
 	CardText
 } from 'reactstrap';
+import cookie from 'react-cookies';
 import lang_fr from '../langues/lang_fr.json';
 import lang_en from '../langues/lang_en.json';
 // import { auth, provider } from '../firebase.js';
 import 'firebase/database';
 import 'firebase/auth';
 import firebase from 'firebase/app';
-import { isNullOrUndefined } from 'util';
+import { chargeUserData } from '../state/app';
 
-export default class ArmorDisplayMember extends React.Component {
+class ArmorDisplayMember extends React.Component {
 	constructor(props) {
 		super(props)
 
@@ -26,100 +28,31 @@ export default class ArmorDisplayMember extends React.Component {
 		if (this.props.lang === "en-US") { this.lang = lang_en; }
 
 		this.state = {
-			user: null,
-			usersIndiv: [],
 			loaded: false,
-			username: "",
-			newUsername: ""
+			isAuth: false
 		};
-
-		this.userData = [];
-
-		firebase.auth().onAuthStateChanged(user => {
-			// currentUser is ready now.
-			if (user) {
-				//console.log(firebase.auth().currentUser);
-				this.setState({ user: firebase.auth().currentUser })
-				this.checkAccount();
-				// User signed in. You can also access from firebase.auth().currentUser.
-			} else {
-				// User signed out.
-			}
-		});
-
-		this.newUsernameInput = React.createRef();
-
-		this.handleChangeUsername = this.handleChangeUsername.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	handleChangeUsername(e) {
-		this.setState({ newUsername: e.target.value });
-	}
-
-	handleSubmit(e) {
-		//alert('New username is: ' + this.state.newUsername);
-		if (this.state.newUsername !== isNullOrUndefined) {
-			let listUsers = firebase.database().ref('mr_users');
-			listUsers.on('value', (snapshot) => {
-				let usersIndiv = snapshot.val();
-				let userFound = false;
-				for (let item in usersIndiv) {
-					if (!userFound) {
-						if (usersIndiv[item].user === this.state.user.email) {
-							//console.log(this.state.newUsername)
-							usersIndiv[item].username = this.state.newUsername;
-
-							//console.log(item);
-							var updates = {}
-							updates['/mr_users/' + item] = usersIndiv[item]
-
-							firebase.database().ref().update(updates);
-							//alert('Yeah, ' + usersIndiv[item].username)
-						}
-					}
-				}
-
-				if (!this.state.loaded) {
-					this.setState({ loaded: true });
-				}
-			});
+	componentDidMount() {
+		if (cookie.load('lecteur_connect') !== "vide") {
+			this.setState({ isAuth: true })
 		}
-		e.preventDefault();
-		window.location.reload();
 	}
 
 	checkAccount() {
 		if (typeof window !== "undefined") {
-			if (this.state.user !== null) {
+			if (this.props.user !== null) {
 				let listUsers = firebase.database().ref('mr_users');
 				if (!this.state.loaded) {
 					listUsers.on('value', (snapshot) => {
 						let usersIndiv = snapshot.val();
-						let newState = [];
 						let userFound = false;
 						for (let item in usersIndiv) {
 							if (!userFound) {
-								if (usersIndiv[item].user === this.state.user.email) {
-									newState.push({
-										id: item,
-										user: this.state.user.email,
-										ferraille: usersIndiv[item].ferraille,
-										prestige: usersIndiv[item].prestige,
-										fightWin: usersIndiv[item].fightWin,
-										fightLose: usersIndiv[item].fightLose,
-										username: usersIndiv[item].username
-									});
+								if (usersIndiv[item].user === this.props.user.email) {
+									this.props.dispatch(chargeUserData(usersIndiv[item]))
 									//console.log("User trouvé")
 									userFound = true;
-
-									this.userData = usersIndiv[item]
-
-									if (this.state.username === "") {
-										this.setState({ username: this.userData.username })
-									}
-
-									this.props.callbackFromParent(this.userData.username)
 								}
 							}
 						}
@@ -154,3 +87,8 @@ export default class ArmorDisplayMember extends React.Component {
 		);
 	}
 }
+
+export default connect(state => ({
+	user: state.app.user,
+	userData: state.app.userData
+}), null)(ArmorDisplayMember)

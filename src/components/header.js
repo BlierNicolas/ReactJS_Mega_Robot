@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'gatsby-link'
+import { connect } from 'react-redux'
 import {
 	Collapse,
 	Navbar,
@@ -16,18 +17,14 @@ import lang_fr from '../langues/lang_fr.json';
 import lang_en from '../langues/lang_en.json';
 import UserConnector from './UserConnector';
 import UserMetaInfo from './UserMetaInfo';
+import { toggleDarkMode } from '../state/app';
 
-export default class Header extends React.Component {
+class Header extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.onEntering = this.onEntering.bind(this);
-		this.onEntered = this.onEntered.bind(this);
-		this.onExiting = this.onExiting.bind(this);
-		this.onExited = this.onExited.bind(this);
-
 		this.toggle = this.toggle.bind(this);
-		this.toggleNight = this.toggleNight.bind(this);
+		this.toggleDark = this.toggleDark.bind(this);
 
 		/** Buffer de la langue par défaut */
 		this.lang = lang_fr;
@@ -45,33 +42,23 @@ export default class Header extends React.Component {
 
 		this.userData = [];
 
-		this.nightMode = false
 		this.mounted = undefined
-
-		if (cookie.load('c_nightMode') !== "null") {
-			this.mounted = cookie.load('c_nightMode');
-			this.checkActif();
-		}
-	}
-
-	onEntering() {
-		this.setState({ status: this.lang.btn_nuit_desactivation });
-	}
-
-	onEntered() {
-		this.setState({ status: this.lang.btn_nuit_inactif });
-	}
-
-	onExiting() {
-		this.setState({ status: this.lang.btn_nuit_activation });
-	}
-
-	onExited() {
-		this.setState({ status: this.lang.btn_nuit_actif });
 	}
 
 	componentDidMount() {
-
+		if (cookie.load('c_nightMode') !== "null") {
+			this.mounted = cookie.load('c_nightMode');
+			//console.log("Cookie: " + this.mounted)
+			if (this.mounted === "true") {
+				document.body.classList.add('darkClass')
+				this.setState({ status: this.lang.btn_nuit_actif });
+			} else if (this.mounted === "false") {
+				document.body.classList.remove('darkClass')
+				this.setState({ status: this.lang.btn_nuit_inactif });
+			}
+		} else {
+			cookie.save('c_nightMode', this.props.isDarkMode, { path: '/' });
+		}
 	}
 
 	toggle() {
@@ -80,38 +67,35 @@ export default class Header extends React.Component {
 		});
 	}
 
-	toggleNight() {
-		this.nightMode = !this.nightMode;
-
-		if (this.nightMode === true) {
-			this.setState({ status: this.lang.btn_nuit_actif });
-			this.nightMode = true
-			cookie.save('c_nightMode', 'on', { path: '/' });
-		} else {
-			this.setState({ status: this.lang.btn_nuit_inactif });
-			this.nightMode = false
-			cookie.save('c_nightMode', 'off', { path: '/' });
-		}
-
-		this.checkActif();
+	toggleDark() {
+		this.props.dispatch(toggleDarkMode(!this.props.isDarkMode))
+		//console.log("Toggle... Darkmode: " + this.props.isDarkMode)
+		cookie.save('c_nightMode', this.props.isDarkMode, { path: '/' });
+		this.checkActif()
 	}
 
 	checkActif() {
 		if (typeof document !== "undefined") {
-			if (this.mounted === 'on') {
-				this.nightMode = true;
-				this.setState({ status: this.lang.btn_nuit_actif });
-				this.mounted = undefined;
-			}
-			if (this.nightMode) {
+			//console.log("Check... Darkmode: " + this.props.isDarkMode)
+
+			if (this.props.isDarkMode) {
+				//console.log("Hey")
 				document.body.classList.add('darkClass')
+				this.setState({ status: this.lang.btn_nuit_actif });
 			} else {
+				//console.log("Ho")
 				document.body.classList.remove('darkClass')
+				this.setState({ status: this.lang.btn_nuit_inactif });
+			}
+			if (this.mounted === "true") {
+				this.mounted = undefined
 			}
 		}
 	}
 
 	render() {
+		//console.log("Render... Darkmode: " + this.props.isDarkMode)
+
 		return (
 			<div>
 				<Navbar color="dark" dark expand="md">
@@ -119,23 +103,14 @@ export default class Header extends React.Component {
 					<Collapse isOpen={this.state.isOpen} navbar>
 						<Nav className="ml-auto nav-center" pills>
 							<NavItem>
-								<Button color="primary" onClick={this.toggleNight}>
+								<Button color="primary" onClick={() => this.props.dispatch(toggleDarkMode(!this.props.isDarkMode), this.toggleDark())}>
 									<FontAwesome
 										name='moon'
 										className='mr-2'
 										style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
 									/>
-									{this.lang.btn_nuit + ((this.nightMode) ? (this.lang.btn_nuit_actif) : (this.lang.btn_nuit_inactif))}
+									{this.lang.btn_nuit} {/*  + ((!this.props.isDarkMode) ? (this.lang.btn_nuit_actif) : (this.lang.btn_nuit_inactif))} */}
 								</Button>
-
-								<Collapse
-									isOpen={this.nightMode}
-									onEntering={this.onEntering}
-									onEntered={this.onEntered}
-									onExiting={this.onExiting}
-									onExited={this.onExited}
-								>
-								</Collapse>
 							</NavItem>
 							<UserMetaInfo />
 							<NavItem>
@@ -152,3 +127,7 @@ export default class Header extends React.Component {
 		);
 	}
 }
+
+export default connect(state => ({
+	isDarkMode: state.app.isDarkMode
+}), null)(Header)

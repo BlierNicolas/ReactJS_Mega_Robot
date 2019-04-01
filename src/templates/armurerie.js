@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { graphql } from "gatsby";
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
@@ -22,8 +23,13 @@ import cookie from 'react-cookies';
 import Helmet from 'react-helmet'
 import lang_fr from '../langues/lang_fr.json';
 import lang_en from '../langues/lang_en.json';
+import 'firebase/database';
+import 'firebase/auth';
+import firebase from 'firebase/app';
+import { chargeUserArmor } from '../state/app';
 
 import Layout from '../components/layout'
+import { Certificate } from 'crypto';
 
 class ArmureriePage extends Component {
 	constructor(props) {
@@ -52,7 +58,8 @@ class ArmureriePage extends Component {
 		this.toggle = this.toggle.bind(this);
 		this.state = {
 			activeTab: '1',
-			username: ""
+			username: "",
+			isAuth: false
 		};
 
 		if (cookie.load('lecteur_connect') == null) {
@@ -64,8 +71,58 @@ class ArmureriePage extends Component {
 		}
 	}
 
+	componentDidMount() {
+		if (cookie.load('lecteur_connect') !== "vide") {
+			this.setState({ isAuth: true })
+			this.checkAccount()
+		}
+	}
+
+	checkAccount() {
+		if (typeof window !== "undefined") {
+			if (this.props.user !== null) {
+				let listUsers = firebase.database().ref('mr_users');
+				listUsers.on('value', (snapshot) => {
+					let usersIndiv = snapshot.val();
+					let userFound = false;
+					for (let item in usersIndiv) {
+						if (!userFound) {
+							if (usersIndiv[item].user === this.props.user.email) {
+								//this.props.dispatch(chargeUserData(usersIndiv[item]))
+								//console.log("User trouvé")
+								userFound = true;
+								this.loadArmor(item)
+							}
+						}
+					}
+				});
+			}
+		}
+	}
+
+	loadArmor(idUser) {
+		if (typeof window !== "undefined") {
+			if (this.props.user !== null) {
+				let listArmors = firebase.database().ref('mr_armor');
+				listArmors.on('value', (snapshot) => {
+					let armorIndiv = snapshot.val();
+					let armorFound = false;
+					for (let item in armorIndiv) {
+						if (!armorFound) {
+							if (armorIndiv[item].userId === idUser) {
+								this.props.dispatch(chargeUserArmor(armorIndiv[item]))
+
+								armorFound = true;
+							}
+						}
+					}
+				});
+			}
+		}
+	}
+
 	myCallback = (dataFromChild) => {
-		this.setState({username : dataFromChild})
+		this.setState({ username: dataFromChild })
 	}
 
 	toggle(tab) {
@@ -98,7 +155,7 @@ class ArmureriePage extends Component {
 							<Nav pills>
 								<NavItem className="cursor-update">
 									<NavLink className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.toggle('1'); }}>
-										Nom de l'armure 1
+										{this.props.userArmor !== null ? this.props.userArmor.nom : "Nom de l'armure 1"}
             						</NavLink>
 								</NavItem>
 								{/* <NavItem className="cursor-update">
@@ -149,7 +206,11 @@ ArmureriePage.propTypes = {
 	data: PropTypes.object.isRequired
 }
 
-export default ArmureriePage
+export default connect(state => ({
+    user: state.app.user,
+	userData: state.app.userData,
+	userArmor: state.app.userArmor
+}), null)(ArmureriePage)
 
 export const pageQuery = graphql`query test3 {
 		site {
