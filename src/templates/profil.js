@@ -56,7 +56,6 @@ class ProfilPage extends React.Component {
 		firebase.auth().onAuthStateChanged(user => {
 			// currentUser is ready now.
 			if (user) {
-				//console.log(firebase.auth().currentUser);
 				this.setState({ user: firebase.auth().currentUser })
 				this.checkAccount();
 				// User signed in. You can also access from firebase.auth().currentUser.
@@ -99,7 +98,6 @@ class ProfilPage extends React.Component {
 										fightLose: usersIndiv[item].fightLose,
 										username: usersIndiv[item].username
 									});
-									//console.log("User trouvé")
 									userFound = true;
 
 									this.userData = usersIndiv[item]
@@ -116,7 +114,6 @@ class ProfilPage extends React.Component {
 						}
 					});
 				}
-				//console.log("loading done")
 			}
 		}
 	}
@@ -135,10 +132,8 @@ class ProfilPage extends React.Component {
 				for (let item in usersIndiv) {
 					if (!userFound) {
 						if (usersIndiv[item].user === this.state.user.email) {
-							//console.log(this.state.newUsername)
 							usersIndiv[item].username = this.state.newUsername;
 
-							//console.log(item);
 							var updates = {}
 							updates['/mr_users/' + item] = usersIndiv[item]
 

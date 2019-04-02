@@ -35,20 +35,15 @@ class UserConnector extends React.Component {
 
     componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
-            //console.log(user)
             if (user) {
                 this.props.dispatch(chargeUserInfo(firebase.auth().currentUser))
-                console.log(firebase.auth().currentUser);
-                console.log(this.props.user.email)
                 this.setState({ user: firebase.auth().currentUser })
                 this.checkAccount();
             }
         });
 
         if (localStorage.getItem('user_connect') !== "vide") {
-            console.log(localStorage.getItem('user_connect'))
             this.props.dispatch(chargeUserInfo(localStorage.getItem('user_connect')))
-            console.log(this.props.user.email)
             this.setState({ isAuth: true })
         }
     }
@@ -59,19 +54,12 @@ class UserConnector extends React.Component {
                 .then((result) => {
                     const user = result.user;
 
-                    console.log("Login done!")
-
                     localStorage.setItem('user_connect', user);
                     this.checkAccount();
                     //this.state.user   à set state 
                     this.setState({ isAuth: true, user: user })
 
                     this.props.dispatch(chargeUserInfo(result.user))
-                    console.log(firebase.auth().currentUser);
-                    console.log(this.props.user)
-
-                    console.log(this.state.userData);
-                    console.log(this.state.isAuth)
                 });
         }
     }
@@ -85,7 +73,6 @@ class UserConnector extends React.Component {
                         isAuth: false
                     });
                     localStorage.setItem('user_connect', "vide");
-                    console.log("Deconnection")
                     window.location.reload();
                 });
         }
@@ -102,7 +89,6 @@ class UserConnector extends React.Component {
                     for (let item in usersIndiv) {
                         if (usersIndiv[item].user === this.props.user.email) {
                             this.props.dispatch(chargeUserData(usersIndiv[item]))
-                            console.log(this.props.userData)
                             //this.setState({ userData: usersIndiv[item] });
 
                             this.setState({ idUser: item });
@@ -112,7 +98,6 @@ class UserConnector extends React.Component {
 
                             usersIndiv[item].isArmorGen = true;
 
-                            //console.log(item);
                             var updates = {}
                             updates['/mr_users/' + item] = usersIndiv[item]
 
@@ -138,7 +123,6 @@ class UserConnector extends React.Component {
 
                     listUsers.push(newUser);
                     userFound = true;
-                    //console.log("New user créé")
                     this.checkArmor();
                 }
             }
@@ -148,7 +132,6 @@ class UserConnector extends React.Component {
     checkArmor(idUser) {
         if (this.props.userData !== null) {
             if (!this.props.userData.isArmorGen) {
-                //console.log(idUser)
                 this.createMember(idUser, "Bras Gauche", "Eau")
                 this.createMember(idUser, "Bras Droit", "Feu")
                 this.createMember(idUser, "Casque", "Neutre")
@@ -165,10 +148,10 @@ class UserConnector extends React.Component {
                     let memberIndiv = snapshot.val();
                     for (let item1 in memberIndiv) {
                         if (memberIndiv[item1].userId === idUser) {
-                            if (memberIndiv[item1].nom === "Bras Gauche") { idBrasGauche = item1; console.log(idBrasGauche); idFound++ }
-                            if (memberIndiv[item1].nom === "Bras Droit") { idBrasDroit = item1; console.log(idBrasDroit); idFound++ }
-                            if (memberIndiv[item1].nom === "Casque") { idCasque = item1; console.log(idCasque); idFound++ }
-                            if (memberIndiv[item1].nom === "Jambes") { idJambes = item1; console.log(idJambes); idFound++ }
+                            if (memberIndiv[item1].nom === "Bras Gauche") { idBrasGauche = item1; idFound++ }
+                            if (memberIndiv[item1].nom === "Bras Droit") { idBrasDroit = item1; idFound++ }
+                            if (memberIndiv[item1].nom === "Casque") { idCasque = item1; idFound++ }
+                            if (memberIndiv[item1].nom === "Jambes") { idJambes = item1; idFound++ }
                             if (idFound === 4) { this.createArmor(idUser, idBrasGauche, idBrasDroit, idCasque, idJambes) }
                         }
                     }
@@ -188,7 +171,7 @@ class UserConnector extends React.Component {
             niveau: 1,
             experience: 0,
             element: elementMembre,
-            isLock: true,
+            isLock: false,
             ameliorationPoint: 0,
             bonus1: null,
             bonus2: null,
@@ -203,7 +186,6 @@ class UserConnector extends React.Component {
             terre3: 0,
             neutre1: 0
         }
-        //console.log(newMember.nom)
         listMembres.push(newMember)
     }
 
@@ -219,7 +201,6 @@ class UserConnector extends React.Component {
             idJambes: idJambes
         }
 
-        //console.log(newArmure)
         listArmures.push(newArmure)
     }
 

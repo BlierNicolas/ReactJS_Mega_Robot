@@ -2,9 +2,7 @@ import React from 'react'
 // import Link from 'gatsby-link'
 import { connect } from 'react-redux'
 import {
-	// Button,
 	Card,
-	CardTitle,
 	CardText
 } from 'reactstrap';
 import lang_fr from '../langues/lang_fr.json';
@@ -13,7 +11,7 @@ import lang_en from '../langues/lang_en.json';
 import 'firebase/database';
 import 'firebase/auth';
 
-class ArmorDisplayMember extends React.Component {
+class FightDisplayMember extends React.Component {
 	constructor(props) {
 		super(props)
 
@@ -30,19 +28,14 @@ class ArmorDisplayMember extends React.Component {
 	render() {
 		return (
 			<div>
-				<Card body className="text-center">
+				<Card className="text-center" body>
 					{
 						this.props.membre !== undefined ?
-							(<>
-								<CardTitle>{this.props.membre.nom + " Tier: " + this.props.membre.tier}</CardTitle>
-								<CardText>
-									Élément: {this.props.membre.element}<br />
-									Niveau: {this.props.membre.niveau}<br />
-									Expérience: {this.props.membre.experience}/{(this.props.membre.niveau-1)*10+10}<br />
-									Vie: {this.props.membre.vie} <br />
-									Points d'amelioration: {this.props.membre.ameliorationPoint}
-								</CardText>
-							</>) :
+							(<CardText>
+								Nom: {this.props.membre.nom} <br />
+								Élément: {this.props.membre.element}<br />
+								Vie: {this.props.membre.vie}
+							</CardText>) :
 							('')
 					}
 					{/* <Button>Changer pour un autre membre</Button> */}
@@ -56,4 +49,4 @@ export default connect(state => ({
 	user: state.app.user,
 	userData: state.app.userData,
 	userArmor: state.app.userArmor
-}), null)(ArmorDisplayMember)
+}), null)(FightDisplayMember)

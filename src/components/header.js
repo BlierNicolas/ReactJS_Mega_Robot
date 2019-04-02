@@ -67,21 +67,17 @@ class Header extends React.Component {
 
 	toggleDark() {
 		this.props.dispatch(toggleDarkMode(!this.props.isDarkMode))
-		//console.log("Toggle... Darkmode: " + this.props.isDarkMode)
 		localStorage.setItem('c_nightMode', this.props.isDarkMode);
 		this.checkActif()
 	}
 
 	checkActif() {
 		if (typeof document !== "undefined") {
-			//console.log("Check... Darkmode: " + this.props.isDarkMode)
 
 			if (this.props.isDarkMode) {
-				//console.log("Hey")
 				document.body.classList.add('darkClass')
 				this.setState({ status: this.lang.btn_nuit_actif });
 			} else {
-				//console.log("Ho")
 				document.body.classList.remove('darkClass')
 				this.setState({ status: this.lang.btn_nuit_inactif });
 			}
@@ -92,8 +88,6 @@ class Header extends React.Component {
 	}
 
 	render() {
-		//console.log("Render... Darkmode: " + this.props.isDarkMode)
-
 		return (
 			<div>
 				<Navbar color="dark" dark expand="md">
@@ -107,7 +101,7 @@ class Header extends React.Component {
 										className='mr-2'
 										style={{ textShadow: '0 1px 0 rgba(0, 0, 0, 0.1)' }}
 									/>
-									{this.lang.btn_nuit} {/*  + ((!this.props.isDarkMode) ? (this.lang.btn_nuit_actif) : (this.lang.btn_nuit_inactif))} */}
+									{this.lang.btn_nuit}
 								</Button>
 							</NavItem>
 							<UserMetaInfo />

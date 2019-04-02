@@ -93,6 +93,7 @@ class IndexPage extends Component {
 												<Teaser titre="Club" desc="Le club est là, vous avez sans doutes des quêtes à accomplir." btn_url={this.lang.header_club_url}/>
 											</Col>
 											<Col lg="4" sm="6" xs="12" className="pb-2">
+												<Teaser titre="Combat aléatoire" desc="C'est le moment d'affronter un robot aléatoire pour s'entraîner." btn_url="combat/"/>
 											</Col>
 										</React.Fragment>) :
 										(<React.Fragment>

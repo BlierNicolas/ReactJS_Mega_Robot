@@ -25,7 +25,7 @@ import lang_en from '../langues/lang_en.json';
 import 'firebase/database';
 import 'firebase/auth';
 import firebase from 'firebase/app';
-import { chargeUserArmor } from '../state/app';
+import { chargeUserData, chargeUserArmor, chargeIdCasque } from '../state/app';
 
 import Layout from '../components/layout'
 
@@ -43,7 +43,13 @@ class ArmureriePage extends Component {
 			idBrasGauche: '',
 			idBrasDroit: '',
 			idCasque: '',
-			idJambes: ''
+			idJambes: '',
+			activeTab: '1',
+			isAuth: false,
+			casque: '',
+			brasGauche: '',
+			brasDroit: '',
+			jambes: ''
 		}
 
 		/** Buffer de la langue par défaut */
@@ -54,11 +60,6 @@ class ArmureriePage extends Component {
 		if (this.props.pageContext.lang === "en-US") { this.lang = lang_en; }
 
 		this.toggle = this.toggle.bind(this);
-		this.state = {
-			activeTab: '1',
-			username: "",
-			isAuth: false
-		};
 
 		if (localStorage.getItem('user_connect') == null) {
 			localStorage.setItem('user_connect', "vide");
@@ -86,8 +87,7 @@ class ArmureriePage extends Component {
 					for (let item in usersIndiv) {
 						if (!userFound) {
 							if (usersIndiv[item].user === this.props.user.email) {
-								//this.props.dispatch(chargeUserData(usersIndiv[item]))
-								//console.log("User trouvé")
+								this.props.dispatch(chargeUserData(usersIndiv[item]))
 								userFound = true;
 								this.loadArmor(item)
 							}
@@ -110,8 +110,35 @@ class ArmureriePage extends Component {
 							if (armorIndiv[item].userId === idUser) {
 								this.props.dispatch(chargeUserArmor(armorIndiv[item]))
 
+								this.loadMembre(armorIndiv[item].idCasque, "Casque")
+								this.loadMembre(armorIndiv[item].idBrasGauche, "Bras gauche")
+								this.loadMembre(armorIndiv[item].idBrasDroit, "Bras droit")
+								this.loadMembre(armorIndiv[item].idJambes, "Jambes")
+
 								armorFound = true;
 							}
+						}
+					}
+				});
+			}
+		}
+	}
+
+	loadMembre(idMembre, kind) {
+		if (typeof window !== "undefined") {
+			if (this.props.user !== null) {
+				let unMembre = firebase.database().ref('mr_member');
+				unMembre.on('value', (snapshot) => {
+					let unMembre = snapshot.val();
+					for (let item in unMembre) {
+						if (item === idMembre) {
+							this.props.dispatch(chargeIdCasque(unMembre[item]))
+
+							if (kind === "Casque") { this.setState({ casque: unMembre[item] }) }
+							if (kind === "Bras gauche") { this.setState({ brasGauche: unMembre[item] }) }
+							if (kind === "Bras droit") { this.setState({ brasDroit: unMembre[item] }) }
+							if (kind === "Jambes") { this.setState({ jambes: unMembre[item] }) }
+
 						}
 					}
 				});
@@ -150,11 +177,11 @@ class ArmureriePage extends Component {
 
 					<Container fluid>
 						<div className="pb-5">
-							<Nav pills>
+							<Nav pills className="pl-15 pr-15">
 								<NavItem className="cursor-update">
 									<NavLink className={classnames({ active: this.state.activeTab === '1' })} onClick={() => { this.toggle('1'); }}>
-										{this.props.userArmor !== null ? this.props.userArmor.nom : "Nom de l'armure 1"}
-            						</NavLink>
+										{this.props.userArmor !== null ? this.props.userArmor.nom : "Nom de l'armure"}
+									</NavLink>
 								</NavItem>
 								{/* <NavItem className="cursor-update">
 									<NavLink className={classnames({ active: this.state.activeTab === '2' })} onClick={() => { this.toggle('2'); }}>
@@ -166,16 +193,16 @@ class ArmureriePage extends Component {
 								<TabPane tabId="1">
 									<Row>
 										<Col lg="3" md="6" sm="12" className="my-3">
-											<ArmorDisplayMember callbackFromParent={this.myCallback} />
+											{this.state.casque !== "" ? <ArmorDisplayMember membre={this.state.casque} /> : <ArmorDisplayMember />}
 										</Col>
 										<Col lg="3" md="6" sm="12" className="my-3">
-											<ArmorDisplayMember callbackFromParent={this.myCallback} />
+											{this.state.brasGauche !== "" ? <ArmorDisplayMember membre={this.state.brasGauche} /> : <ArmorDisplayMember />}
 										</Col>
 										<Col lg="3" md="6" sm="12" className="my-3">
-											<ArmorDisplayMember callbackFromParent={this.myCallback} />
+											{this.state.brasDroit !== "" ? <ArmorDisplayMember membre={this.state.brasDroit} /> : <ArmorDisplayMember />}
 										</Col>
 										<Col lg="3" md="6" sm="12" className="my-3">
-											<ArmorDisplayMember callbackFromParent={this.myCallback} />
+											{this.state.jambes !== "" ? <ArmorDisplayMember membre={this.state.jambes} /> : <ArmorDisplayMember />}
 										</Col>
 									</Row>
 								</TabPane>
@@ -205,15 +232,15 @@ ArmureriePage.propTypes = {
 }
 
 export default connect(state => ({
-    user: state.app.user,
+	user: state.app.user,
 	userData: state.app.userData,
 	userArmor: state.app.userArmor
 }), null)(ArmureriePage)
 
 export const pageQuery = graphql`query test3 {
-		site {
-		siteMetadata {
-				title
-		}
-	}
+							site {
+						siteMetadata {
+							title
+						}
+						}
 	}`
