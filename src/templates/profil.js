@@ -18,7 +18,6 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import EquivURL from '../components/equivURL';
 // import ProfileChange from '../components/profileChange';
-import cookie from 'react-cookies';
 import Helmet from 'react-helmet'
 import lang_fr from '../langues/lang_fr.json';
 import lang_en from '../langues/lang_en.json';
@@ -71,12 +70,12 @@ class ProfilPage extends React.Component {
 		this.handleChangeUsername = this.handleChangeUsername.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 
-		if (cookie.load('lecteur_connect') == null) {
-			cookie.save('lecteur_connect', "vide", { path: '/' });
+		if (localStorage.getItem('user_connect') == null) {
+			localStorage.setItem('user_connect', "vide");
 		}
 
-		if (cookie.load('lecteur_connect') !== "vide") {
-			this.state.lecteur = cookie.load('lecteur_connect')
+		if (localStorage.getItem('user_connect') !== "vide") {
+			this.state.lecteur = localStorage.getItem('user_connect')
 		}
 	}
 

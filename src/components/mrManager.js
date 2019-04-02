@@ -47,7 +47,7 @@
 				
 // 				console.log("Login done!")
 
-// 				cookie.save('lecteur_connect', user, { path: '/' });
+// 				localStorage.setItem('user_connect', user, { path: '/' });
 // 				checkAccount();
 
 // 				console.log("User " + user);
@@ -67,7 +67,7 @@
 // 				this.setState({
 // 					user: null
 // 				});
-// 				cookie.save('lecteur_connect', "vide", { path: '/' });
+// 				localStorage.setItem('user_connect', "vide", { path: '/' });
 
 // 				window.location.reload();
 // 			});

@@ -19,7 +19,6 @@ import Footer from '../components/footer'
 import EquivURL from '../components/equivURL';
 import ArmorDisplayMember from '../components/armorDisplayMember';
 import classnames from 'classnames';
-import cookie from 'react-cookies';
 import Helmet from 'react-helmet'
 import lang_fr from '../langues/lang_fr.json';
 import lang_en from '../langues/lang_en.json';
@@ -29,7 +28,6 @@ import firebase from 'firebase/app';
 import { chargeUserArmor } from '../state/app';
 
 import Layout from '../components/layout'
-import { Certificate } from 'crypto';
 
 class ArmureriePage extends Component {
 	constructor(props) {
@@ -62,17 +60,17 @@ class ArmureriePage extends Component {
 			isAuth: false
 		};
 
-		if (cookie.load('lecteur_connect') == null) {
-			cookie.save('lecteur_connect', "vide", { path: '/' });
+		if (localStorage.getItem('user_connect') == null) {
+			localStorage.setItem('user_connect', "vide");
 		}
 
-		if (cookie.load('lecteur_connect') !== "vide") {
-			this.state.lecteur = cookie.load('lecteur_connect')
+		if (localStorage.getItem('user_connect') !== "vide") {
+			this.state.lecteur = localStorage.getItem('user_connect')
 		}
 	}
 
 	componentDidMount() {
-		if (cookie.load('lecteur_connect') !== "vide") {
+		if (localStorage.getItem('user_connect') !== "vide") {
 			this.setState({ isAuth: true })
 			this.checkAccount()
 		}

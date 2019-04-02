@@ -7,7 +7,6 @@ import {
 	CardTitle,
 	CardText
 } from 'reactstrap';
-import cookie from 'react-cookies';
 import lang_fr from '../langues/lang_fr.json';
 import lang_en from '../langues/lang_en.json';
 // import { auth, provider } from '../firebase.js';
@@ -34,7 +33,7 @@ class ArmorDisplayMember extends React.Component {
 	}
 
 	componentDidMount() {
-		if (cookie.load('lecteur_connect') !== "vide") {
+		if (localStorage.getItem('user_connect') !== "vide") {
 			this.setState({ isAuth: true })
 		}
 	}

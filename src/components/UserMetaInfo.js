@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import {
     NavItem
 } from 'reactstrap';
-import cookie from 'react-cookies';
 
 class UserMetaInfo extends React.Component {
     constructor(props) {
@@ -15,7 +14,7 @@ class UserMetaInfo extends React.Component {
     }
 
     componentDidMount() {
-        if (cookie.load('lecteur_connect') !== "vide") {
+        if (localStorage.getItem('user_connect') !== "vide") {
             this.setState({isAuth: true})
 		}
     }

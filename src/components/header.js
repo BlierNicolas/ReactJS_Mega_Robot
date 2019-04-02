@@ -10,7 +10,6 @@ import {
 	Button
 } from 'reactstrap';
 import FontAwesome from 'react-fontawesome';
-import cookie from 'react-cookies';
 import 'firebase/database';
 import 'firebase/auth';
 import lang_fr from '../langues/lang_fr.json';
@@ -46,9 +45,8 @@ class Header extends React.Component {
 	}
 
 	componentDidMount() {
-		if (cookie.load('c_nightMode') !== "null") {
-			this.mounted = cookie.load('c_nightMode');
-			//console.log("Cookie: " + this.mounted)
+		if (localStorage.getItem('c_nightMode') !== "null") {
+			this.mounted = localStorage.getItem('c_nightMode');
 			if (this.mounted === "true") {
 				document.body.classList.add('darkClass')
 				this.setState({ status: this.lang.btn_nuit_actif });
@@ -57,7 +55,7 @@ class Header extends React.Component {
 				this.setState({ status: this.lang.btn_nuit_inactif });
 			}
 		} else {
-			cookie.save('c_nightMode', this.props.isDarkMode, { path: '/' });
+			localStorage.setItem('c_nightMode', this.props.isDarkMode);
 		}
 	}
 
@@ -70,7 +68,7 @@ class Header extends React.Component {
 	toggleDark() {
 		this.props.dispatch(toggleDarkMode(!this.props.isDarkMode))
 		//console.log("Toggle... Darkmode: " + this.props.isDarkMode)
-		cookie.save('c_nightMode', this.props.isDarkMode, { path: '/' });
+		localStorage.setItem('c_nightMode', this.props.isDarkMode);
 		this.checkActif()
 	}
 

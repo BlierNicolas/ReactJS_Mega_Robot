@@ -8,7 +8,6 @@ import {
     DropdownItem,
     Button
 } from 'reactstrap';
-import cookie from 'react-cookies';
 import { auth, provider } from '../firebase.js';
 import 'firebase/database';
 import 'firebase/auth';
@@ -46,9 +45,9 @@ class UserConnector extends React.Component {
             }
         });
 
-        if (cookie.load('lecteur_connect') !== "vide") {
-            console.log(cookie.load('lecteur_connect'))
-            this.props.dispatch(chargeUserInfo(cookie.load('lecteur_connect')))
+        if (localStorage.getItem('user_connect') !== "vide") {
+            console.log(localStorage.getItem('user_connect'))
+            this.props.dispatch(chargeUserInfo(localStorage.getItem('user_connect')))
             console.log(this.props.user.email)
             this.setState({ isAuth: true })
         }
@@ -62,7 +61,7 @@ class UserConnector extends React.Component {
 
                     console.log("Login done!")
 
-                    cookie.save('lecteur_connect', user, { path: '/' });
+                    localStorage.setItem('user_connect', user);
                     this.checkAccount();
                     //this.state.user   à set state 
                     this.setState({ isAuth: true, user: user })
@@ -85,7 +84,7 @@ class UserConnector extends React.Component {
                         user: null,
                         isAuth: false
                     });
-                    cookie.save('lecteur_connect', "vide", { path: '/' });
+                    localStorage.setItem('user_connect', "vide");
                     console.log("Deconnection")
                     window.location.reload();
                 });
