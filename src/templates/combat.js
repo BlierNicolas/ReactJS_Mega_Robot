@@ -19,7 +19,7 @@ import lang_en from '../langues/lang_en.json';
 import 'firebase/database';
 import 'firebase/auth';
 import firebase from 'firebase/app';
-import { chargeUserData } from '../state/app';
+import { chargeUserData, chargeUserArmor, chargeIdCasque, chargeIdBrasDroit, chargeIdBrasGauche, chargeIdJambes } from '../state/app';
 
 import Layout from '../components/layout'
 
@@ -31,7 +31,17 @@ class CombatPage extends Component {
 			username: '',
 			items: [],
 			connectedUser: null,
-			lecteur: "vide"
+			lecteur: "vide",
+			casque: '',
+			brasGauche: '',
+			brasDroit: '',
+			jambes: '',
+			casqueAdv: '',
+			brasGaucheAdv: '',
+			brasDroitAdv: '',
+			jambesAdv: '',
+			unFight: null,
+			newFight: null
 		}
 
 		/** Buffer de la langue par défaut */
@@ -107,9 +117,13 @@ class CombatPage extends Component {
 		if (this.props.userData !== null) {
 			let listFights = firebase.database().ref('mr_fight');
 
+			this.loadArmor(idUser)
+
 			const minVieAdv = 11
 			const maxVieAdv = 15
 			const randVieAdv = Math.round(minVieAdv + Math.random() * (maxVieAdv - minVieAdv))
+
+			console.log("Random vie " + randVieAdv)
 
 			const minIdElem = 1
 			const maxIdElem = 4
@@ -122,6 +136,7 @@ class CombatPage extends Component {
 			else if (randElemBrasGauche === 2) { randElemBrasGauche = "Eau" }
 			else if (randElemBrasGauche === 3) { randElemBrasGauche = "Feu" }
 			else if (randElemBrasGauche === 4) { randElemBrasGauche = "Terre" }
+
 
 			if (randElemBrasDroit === 1) { randElemBrasDroit = "Neutre" }
 			else if (randElemBrasDroit === 2) { randElemBrasDroit = "Eau" }
@@ -138,29 +153,100 @@ class CombatPage extends Component {
 			else if (randElemJambes === 3) { randElemJambes = "Feu" }
 			else if (randElemJambes === 4) { randElemJambes = "Terre" }
 
-			const newFight = {
+			console.log("Random elem " + randElemBrasGauche + " " + randElemBrasDroit + " " + randElemCasque + " " + randElemJambes)
+			this.state.brasGaucheAdv = { vie: randVieAdv, element: randElemBrasGauche, elementAdvConnu: true, nom: "Bras Gauche" }
+			this.state.brasDroitAdv = { vie: randVieAdv, element: randElemBrasDroit, elementAdvConnu: false, nom: "Bras Droit" }
+			this.state.casqueAdv = { vie: randVieAdv, element: randElemCasque, elementAdvConnu: false, nom: "Casque" }
+			this.state.jambesAdv = { vie: randVieAdv, element: randElemJambes, elementAdvConnu: false, nom: "Jambes" }
+
+			this.state.newFight = {
 				idUser: idUser,
 				tourJoueur: 1,
-				// -brasGaucheVie1
 				brasGaucheVieAdv: randVieAdv,
-				// -brasGaucheElement1
 				brasGaucheElementAdv: randElemBrasGauche,
-				// -brasDroitVie1
+				brasGaucheElementAdvConnu: false,
 				brasDroitVieAdv: randVieAdv,
-				// -brasDroitElement1
 				brasDroitElementAdv: randElemBrasDroit,
-				// -casqueVie1
+				brasDroitElementAdvConnu: false,
 				casqueVieAdv: randVieAdv,
-				// -casqueElement1
 				casqueElementAdv: randElemCasque,
-				// -jambesVie1
+				casqueElementAdvConnu: false,
 				jambesVieAdv: randVieAdv,
-				// -jambesElement1
-				jambesElementAdv: randElemJambes
-				// -premierMembreDetruitJoueur
+				jambesElementAdv: randElemJambes,
+				jambesElementAdvConnu: false,
+				premierMembreDetruitJoueur: 0
 			}
 
-			//listFights.push(newFight)
+			console.log(this.state.newFight)
+			//listFights.push(this.state.newFight)
+		}
+	}
+
+	loadArmor(idUser) {
+		if (typeof window !== "undefined") {
+			if (this.props.user !== null) {
+				let listArmors = firebase.database().ref('mr_armor');
+				listArmors.on('value', (snapshot) => {
+					let armorIndiv = snapshot.val();
+					let armorFound = false;
+					for (let item in armorIndiv) {
+						if (!armorFound) {
+							if (armorIndiv[item].userId === idUser) {
+								this.props.dispatch(chargeUserArmor(armorIndiv[item]))
+
+								console.log("Associer membre")
+								this.loadMembre(armorIndiv[item].idCasque, "Casque")
+								this.loadMembre(armorIndiv[item].idBrasGauche, "Bras gauche")
+								this.loadMembre(armorIndiv[item].idBrasDroit, "Bras droit")
+								this.loadMembre(armorIndiv[item].idJambes, "Jambes")
+
+								armorFound = true;
+							}
+						}
+					}
+				});
+			}
+		}
+	}
+
+	loadMembre(idMembre, kind) {
+		if (typeof window !== "undefined") {
+			if (this.props.user !== null) {
+				let unMembre = firebase.database().ref('mr_member');
+				unMembre.on('value', (snapshot) => {
+					let unMembre = snapshot.val();
+					for (let item in unMembre) {
+						if (item === idMembre && this.state.newFight != null) {
+							if (kind === "Casque") {
+								this.props.dispatch(chargeIdCasque(unMembre[item]))
+								this.state.newFight["casqueVieJ"] = unMembre[item].vie
+								this.state.newFight["casqueElementJ"] = unMembre[item].element
+								this.setState({ casque: unMembre[item] })
+							}
+							if (kind === "Bras gauche") {
+								this.props.dispatch(chargeIdBrasGauche(unMembre[item]))
+								this.state.newFight["brasGaucheVieJ"] = unMembre[item].vie
+								this.state.newFight["brasGaucheElementJ"] = unMembre[item].element
+								this.setState({ brasGauche: unMembre[item] })
+							}
+							if (kind === "Bras droit") {
+								this.props.dispatch(chargeIdBrasDroit(unMembre[item]))
+								this.state.newFight["brasDroitVieJ"] = unMembre[item].vie
+								this.state.newFight["brasDroitElementJ"] = unMembre[item].element
+								this.setState({ brasDroit: unMembre[item] })
+							}
+							if (kind === "Jambes") {
+								this.props.dispatch(chargeIdJambes(unMembre[item]))
+								this.state.newFight["jambesVieJ"] = unMembre[item].vie
+								this.state.newFight["jambesElementJ"] = unMembre[item].element
+								this.setState({ jambes: unMembre[item] })
+							}
+
+							console.log(unMembre[item])
+						}
+					}
+				});
+			}
 		}
 	}
 
@@ -185,18 +271,61 @@ class CombatPage extends Component {
 									<Col lg="4" md="6" xs="12">
 										<Row>
 											<Col lg="6" xs="12">
-												<FightDisplayMember />
+												{this.state.casque !== null ?
+													<FightDisplayMember membre={this.state.casque} /> :
+													<FightDisplayMember />
+												}
 											</Col>
-											<Col lg="6" xs="12">Nom bras gauche</Col>
-											<Col lg="6" xs="12">Nom bras droit</Col>
-											<Col lg="6" xs="12">Nom jambes</Col>
+											<Col lg="6" xs="12">
+												{this.state.brasGauche !== null ?
+													<FightDisplayMember membre={this.state.brasGauche} /> :
+													<FightDisplayMember />
+												}
+											</Col>
+											<Col lg="6" xs="12">
+												{this.state.brasDroit !== null ?
+													<FightDisplayMember membre={this.state.brasDroit} /> :
+													<FightDisplayMember />
+												}
+											</Col>
+											<Col lg="6" xs="12">
+												{this.state.jambes !== null ?
+													<FightDisplayMember membre={this.state.jambes} /> :
+													<FightDisplayMember />
+												}
+											</Col>
 										</Row>
 									</Col>
 									<Col lg="4" md="6" xs="12">
 										Bouton d'attaque
 									</Col>
 									<Col lg="4" md="6" xs="12">
-										Infos adversaire
+										<Row>
+											<Col lg="6" xs="12">
+												{this.state.casqueAdv !== null ?
+													<FightDisplayMember membre={this.state.casqueAdv} /> :
+													<FightDisplayMember />
+												}
+											</Col>
+											<Col lg="6" xs="12">
+												{this.state.brasGaucheAdv !== null ?
+													<FightDisplayMember membre={this.state.brasGaucheAdv} /> :
+													<FightDisplayMember />
+												}
+											</Col>
+											<Col lg="6" xs="12">
+												{this.state.brasDroitAdv !== null ?
+													<FightDisplayMember membre={this.state.brasDroitAdv} /> :
+													<FightDisplayMember />
+												}
+											</Col>
+											<Col lg="6" xs="12">
+												{this.state.jambesAdv !== null ?
+													<FightDisplayMember membre={this.state.jambesAdv} /> :
+													<FightDisplayMember />
+												}
+											</Col>
+										</Row>
 									</Col>
 								</Row>
 							</div>

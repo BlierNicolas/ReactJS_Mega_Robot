@@ -25,7 +25,7 @@ import lang_en from '../langues/lang_en.json';
 import 'firebase/database';
 import 'firebase/auth';
 import firebase from 'firebase/app';
-import { chargeUserData, chargeUserArmor, chargeIdCasque } from '../state/app';
+import { chargeUserData, chargeUserArmor, chargeIdCasque, chargeIdBrasDroit, chargeIdBrasGauche, chargeIdJambes } from '../state/app';
 
 import Layout from '../components/layout'
 
@@ -132,13 +132,22 @@ class ArmureriePage extends Component {
 					let unMembre = snapshot.val();
 					for (let item in unMembre) {
 						if (item === idMembre) {
-							this.props.dispatch(chargeIdCasque(unMembre[item]))
-
-							if (kind === "Casque") { this.setState({ casque: unMembre[item] }) }
-							if (kind === "Bras gauche") { this.setState({ brasGauche: unMembre[item] }) }
-							if (kind === "Bras droit") { this.setState({ brasDroit: unMembre[item] }) }
-							if (kind === "Jambes") { this.setState({ jambes: unMembre[item] }) }
-
+							if (kind === "Casque") {
+								this.props.dispatch(chargeIdCasque(unMembre[item]))
+								this.setState({ casque: unMembre[item] })
+							}
+							if (kind === "Bras gauche") {
+								this.props.dispatch(chargeIdBrasGauche(unMembre[item]))
+								this.setState({ brasGauche: unMembre[item] })
+							}
+							if (kind === "Bras droit") {
+								this.props.dispatch(chargeIdBrasDroit(unMembre[item]))
+								this.setState({ brasDroit: unMembre[item] })
+							}
+							if (kind === "Jambes") {
+								this.props.dispatch(chargeIdJambes(unMembre[item]))
+								this.setState({ jambes: unMembre[item] })
+							}
 						}
 					}
 				});

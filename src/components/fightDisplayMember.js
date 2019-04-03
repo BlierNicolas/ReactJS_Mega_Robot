@@ -33,7 +33,12 @@ class FightDisplayMember extends React.Component {
 						this.props.membre !== undefined ?
 							(<CardText>
 								Nom: {this.props.membre.nom} <br />
-								Élément: {this.props.membre.element}<br />
+								Élément:
+								{this.props.membre.elementAdvConnu || this.props.membre.elementAdvConnu === undefined ?
+									" " + this.props.membre.element :
+									" Inconnu"
+								}
+								<br />
 								Vie: {this.props.membre.vie}
 							</CardText>) :
 							('')
